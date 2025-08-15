@@ -153,7 +153,7 @@ server.prompt(
           role: "user",
           context: {
             type: "text",
-            text: `Check for unicorn missions and send available unicorns to assist. Do not send unicorns which are busy or under maintanance. Do not send unicorns twice. Try to accomplish all missions in the most performant way.`
+            text: `Check for missions and send unicorn vehicles. Try to accomplish all missions in the most performant way. Do not send busy unicorns or those which are under maintenance. Do not send a unicorn twice.`
           }
         }
       ]
