@@ -1,0 +1,8 @@
+{
+  "lss-scene": {
+    "description": "A toolset for managing and interacting with LSS scenes.",
+    "tools" : [
+      "scene_description"
+    ]
+  }
+}
