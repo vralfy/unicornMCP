@@ -1,29 +1,34 @@
 {
-  "servers": {
-    "mcpcli-wsl": {
-      "type": "stdio",
-      "command": "wsl",
-      "args": [
-        "npm",
-        "run",
-        "mcpcli",
-        "--prefix=~/git/docker/project/unicornmcp",
-      ],
-      "env": {
-        "NODE_TLS_REJECT_UNAUTHORIZED": "0"
-      }
-    },
-    "mcpcli": {
-      "type": "stdio",
-      "command": "npm",
-      "args": [
-        "run",
-        "mcpcli",
-        "--prefix=${workspaceFolder}",
-      ],
-      "env": {
-        "NODE_TLS_REJECT_UNAUTHORIZED": "0"
-      }
-    }
-  }
+	"servers": {
+		"mcpcli-wsl": {
+			"type": "stdio",
+			"command": "wsl",
+			"args": [
+				"npm",
+				"run",
+				"mcpcli",
+				"--prefix=~/git/docker/project/unicornmcp"
+			],
+			"env": {
+				"NODE_TLS_REJECT_UNAUTHORIZED": "0"
+			}
+		},
+		"mcpcli": {
+			"type": "stdio",
+			"command": "npm",
+			"args": [
+				"run",
+				"mcpcli",
+				"--prefix=${workspaceFolder}"
+			],
+			"env": {
+				"NODE_TLS_REJECT_UNAUTHORIZED": "0"
+			}
+		},
+		"rainbowroad": {
+			"url": "http://localhost:3000",
+			"type": "http"
+		}
+	},
+	"inputs": []
 }

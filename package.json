@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "mcpcli": "node mcpcli.js",
+    "mcpserver": "node mcpcli.js --rainbowroad",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -1,5 +1,8 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
+// Magical imports for webserver
+import express from "express";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { z } from "zod"
 import fs from "fs"
 
@@ -66,15 +69,6 @@ server.tool(
   })
 );
 
-server.tool(
-  "add",
-  "Add two numbers",
-  { a: z.number(), b: z.number() },
-  async ({ a, b }) => ({
-    content: [{ type: "text", text: String(a + b) }],
-  })
-);
-
 server.prompt(
   "unicornprompt",
   { txt: z.string() },
@@ -108,6 +102,22 @@ server.prompt(
   }
 );
 
+// Magical transport selection: use HTTP if --rainbowroad flag is set
+let transport;
+if (process.argv.includes('--rainbowroad')) {
+  const app = express();
+  const port = process.env.PORT || 3000;
+  transport = new StreamableHTTPServerTransport({ app });
+  await server.connect(transport);
+  app.listen(port, () => {
+    logger(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
+    console.log(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
+  });
+} else {
+  transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
 // New prompt: Unicorn Name Generator
 server.prompt(
   "unicornNameGenerator",
@@ -131,29 +141,6 @@ server.prompt(
     };
   }
 );
-
-server.tool(
-  "unicorntool",
-  "Provides a scene description",
-  { id: z.number() },
-  async ({ id }) => {
-    const file = process.cwd() + '/missions/' + id + '.html';
-    try {
-
-      return {
-        content: [{ type: "text", text: html }],
-      }
-    } catch (e) {
-      logger('Error fetching scene description:', e.message);
-      return {
-        content: [{ type: "text", text: 'Error fetching scene description: ' + e.message }],
-      }
-    }
-  }
-);
-
-const transport = new StdioServerTransport()
-await server.connect(transport)
 
 // Tool: List unicorn vehicles and their status
 server.tool(
