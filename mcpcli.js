@@ -228,3 +228,20 @@ server.tool(
     };
   }
 );
+// Tool: Assign unicorn vehicles to a mission
+server.tool(
+  "assignVehiclesToMission",
+  "Assigns an array of unicorn vehicles to a unicorn mission by mission ID.",
+  { missionId: z.number(), vehicles: z.array(z.string()) },
+  async ({ missionId, vehicles }) => {
+    // Log the magical assignment
+    logger(`✨ Mission ${missionId} assigned to vehicles: ${vehicles.join(", ")}`);
+    // Return a sparkly confirmation
+    return {
+      content: [{
+        type: "text",
+        text: `Mission ${missionId} has been assigned to these unicorn vehicles: ${vehicles.join(", ")}. May rainbows guide their way! 🦄🌈`
+      }]
+    };
+  }
+);
