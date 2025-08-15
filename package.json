@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple unicorn project",
   "main": "mcpcli.js",
+  "type": "module",
   "scripts": {
     "mcpcli": "node mcpcli.js",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -5,6 +5,7 @@ import fs from "fs"
 
 const info = JSON.parse(fs.readFileSync("mcp.json", "utf-8"))
 const logfile = process.cwd() + "/mcp.log";
+const enableJsonOutput = false;
 
 fs.writeFileSync(logfile, JSON.stringify(info, null, 2), { encoding: 'utf8', flag: 'w+' }, (err) => {
   if (err) {
@@ -68,8 +69,8 @@ server.tool(
 
 server.prompt(
   "unicornprompt",
-  { id: z.string() },
-  async ({ id }) => {
+  { txt: z.string() },
+  async ({ txt }) => {
     try {
 
       return {
@@ -78,7 +79,7 @@ server.prompt(
             role: "user",
             context: {
               type: "text",
-              text: fs.readFileSync(process.cwd() + '/.vscode/prompts/basic.prompt.md')
+              text: fs.readFileSync(process.cwd() + '/.vscode/prompts/basic.prompt.md') + txt
             }
           }
         ]
@@ -123,3 +124,51 @@ server.tool(
 
 const transport = new StdioServerTransport()
 await server.connect(transport)
+// Tool: List unicorn vehicles and their status
+server.tool(
+  "listUnicornVehicles",
+  "Returns a list of unicorn vehicles and their status",
+  {},
+  async () => {
+    // Example unicorn vehicles data
+    const vehicles = [];
+
+    for (let i = 1; i < 5; i++) {
+      vehicles.push({
+        name: `Unicorn Wrangler ${i}`,
+        type: "Wrangler",
+        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+      });
+      vehicles.push({
+        name: `Rainbow Engineer ${i}`,
+        type: "Engineer",
+        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+      });
+      vehicles.push({
+        name: `Horn Polisher ${i}`,
+        type: "Polisher",
+        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+      });
+      vehicles.push({
+        name: `Snack Courier ${i}`,
+        type: "Courier",
+        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+      });
+      vehicles.push({
+        name: `Pegasus Guide ${i}`,
+        type: "Guide",
+        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+      });
+    }
+    logger('Generated unicorn vehicles:', JSON.stringify(vehicles, null, 2));
+    return {
+      content: enableJsonOutput ? [{
+        type: "json",
+        json: vehicles
+      }] : [{
+        type: "text",
+        text: "The list of all unicorn vehicles: " + JSON.stringify(vehicles, null, 2)
+      }]
+    };
+  }
+);
