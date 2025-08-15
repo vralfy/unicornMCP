@@ -1,0 +1,27 @@
+{
+  "name": "unicorn",
+  "version": "1.0.0",
+  "description": "A simple unicorn project",
+  "main": "mcpcli.js",
+  "scripts": {
+    "mcpcli": "node mcpcli.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vralfy/unicorn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vralfy/unicorn/issues"
+  },
+  "homepage": "https://github.com/vralfy/unicorn#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "express": "^5.0.0",
+    "node-fetch": "^3.0.0",
+    "zod": "^3.0.0"
+  }
+}
