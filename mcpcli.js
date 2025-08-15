@@ -15,11 +15,19 @@ fs.writeFileSync(logfile, JSON.stringify(info, null, 2), { encoding: 'utf8', fla
   }
 });
 
+const echo = (...msg) =>{
+  logger(...msg);
+  const timestamp = new Date().toISOString();
+  const formatedParts = (msg ?? []).map(part => JSON.stringify(part));
+  const formattedMsg = `[${timestamp}] ${formatedParts.join(' ')}\n`;
+  console.log(formattedMsg);
+}
+
 const logger = (...msg) => {
   const timestamp = new Date().toISOString();
-  const formattedMsg = `[${timestamp}] ${msg.join(' ')}\n`;
+  const formatedParts = (msg ?? []).map(part => JSON.stringify(part));
+  const formattedMsg = `[${timestamp}] ${formatedParts.join(' ')}\n`;
   fs.appendFileSync(logfile, formattedMsg, 'utf8', { flag: 'a' });
-  console.log(formattedMsg);
 }
 
 logger("Starting UniCorn MagicCP server with info:", info);
@@ -133,32 +141,36 @@ server.tool(
   async () => {
     // Example unicorn vehicles data
     const vehicles = [];
-
-    for (let i = 1; i < 5; i++) {
+    const statuses = [
+      ...(new Array(5).fill('available')),
+      ...(new Array(3).fill('busy')),
+      ...(new Array(2).fill('in maintenance')),
+    ];
+    for (let i = 1; i < 3; i++) {
       vehicles.push({
         name: `Unicorn Wrangler ${i}`,
         type: "Wrangler",
-        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+        status: statuses[Math.floor(Math.random() * statuses.length)]
       });
       vehicles.push({
         name: `Rainbow Engineer ${i}`,
         type: "Engineer",
-        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+        status: statuses[Math.floor(Math.random() * statuses.length)]
       });
       vehicles.push({
         name: `Horn Polisher ${i}`,
         type: "Polisher",
-        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+        status: statuses[Math.floor(Math.random() * statuses.length)]
       });
       vehicles.push({
         name: `Snack Courier ${i}`,
         type: "Courier",
-        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+        status: statuses[Math.floor(Math.random() * statuses.length)]
       });
       vehicles.push({
         name: `Pegasus Guide ${i}`,
         type: "Guide",
-        status: ['available', 'busy', 'in maintenance'][Math.floor(Math.random() * 3)]
+        status: statuses[Math.floor(Math.random() * statuses.length)]
       });
     }
     logger('Generated unicorn vehicles:', JSON.stringify(vehicles, null, 2));
@@ -209,7 +221,7 @@ server.tool(
       }
     ];
 
-    const missions = new Array(10).fill(0).map((_, i) => {
+    const missions = new Array(20).fill(0).map((_, i) => {
       return {
         ...missionsList[i % missionsList.length],
         id: 100 + i
@@ -228,14 +240,24 @@ server.tool(
     };
   }
 );
+
 // Tool: Assign unicorn vehicles to a mission
 server.tool(
   "assignVehiclesToMission",
   "Assigns an array of unicorn vehicles to a unicorn mission by mission ID.",
   { missionId: z.number(), vehicles: z.array(z.string()) },
   async ({ missionId, vehicles }) => {
+    if (!vehicles.length) {
+      logger('No vehicles assigned to mission', missionId);
+      return {
+        content: [{
+          type: "text",
+          text: `You did not assign any unicorns. May rainbows be with you! 🦄🌈`
+        }]
+      };
+    }
     // Log the magical assignment
-    logger(`✨ Mission ${missionId} assigned to vehicles: ${vehicles.join(", ")}`);
+    echo(`✨ Mission ${missionId} assigned to vehicles: ${vehicles.join(", ")}`);
     // Return a sparkly confirmation
     return {
       content: [{
