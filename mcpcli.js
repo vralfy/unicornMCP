@@ -142,6 +142,25 @@ server.prompt(
   }
 );
 
+// New prompt: send Unicorns to missions
+server.prompt(
+  "sendUnicorns",
+  {},
+  async () => {
+    return {
+      messages: [
+        {
+          role: "user",
+          context: {
+            type: "text",
+            text: `Check for unicorn missions and send available unicorns to assist. Do not send unicorns which are busy or under maintanance. Do not send unicorns twice. Try to accomplish all missions in the most performant way.`
+          }
+        }
+      ]
+    };
+  }
+);
+
 // Tool: List unicorn vehicles and their status
 server.tool(
   "listUnicornVehicles",
