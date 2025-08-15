@@ -80,7 +80,6 @@ server.prompt(
   { txt: z.string() },
   async ({ txt }) => {
     try {
-
       return {
         messages: [
           {
@@ -106,7 +105,30 @@ server.prompt(
         ]
       };
     }
+  }
+);
 
+// New prompt: Unicorn Name Generator
+server.prompt(
+  "unicornNameGenerator",
+  {
+    color: z.string(),
+    food: z.string(),
+    mood: z.string(),
+    expertise: z.string()
+  },
+  async ({ color, food, mood, expertise }) => {
+    return {
+      messages: [
+        {
+          role: "user",
+          context: {
+            type: "text",
+            text: `Please give me a name for a unicorn 🦄✨ Its favorite color is ${color}, its favorite food is ${food}, its mood is ${mood}, and its an expert in ${expertise}.`
+          }
+        }
+      ]
+    };
   }
 );
 
@@ -267,3 +289,5 @@ server.tool(
     };
   }
 );
+
+// This server was brought to you by

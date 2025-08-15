@@ -1,0 +1,10 @@
+- "Unicorn Name Generator" Tool  Let the audience create magical unicorn names on the spot! They enter a favorite color, food, or mood, and the tool returns a unique unicorn name (e.g., “Cotton Candy Twinklehoof”).
+- "Rainbow Weather Forecast" Prompt  Ask the MCP: “What’s the magical weather in Unicorn City today?” The prompt returns a playful forecast—rainbow showers, glitter storms, or sunny sparkles.
+- "Friendship Meter" Tool  Audience members input their names, and the tool calculates a “Friendship Power Level” with a fun message and emoji meter.
+- "Unicorn Storyteller" Prompt  Let the audience suggest a mission, and the prompt returns a short, whimsical story about how the unicorns solve it—great for showing off prompt chaining and creative output.
+- Unicorn Mood Detector Tool  Audience picks a unicorn, and the tool reveals its magical mood—excited, sleepy, hungry, or ready to dance—plus a tip to cheer it up!
+- Rainbow Road Builder  Let the audience design a new rainbow road by choosing colors and shapes. The tool generates a dazzling description and shows how unicorns react to the new path.
+- Horn Shine Meter  Audience votes on which unicorn needs a horn polish. The tool displays a “shine meter” and sparkly animation as the horn gets polished to perfection.
+- Magical Snack Creator  Audience invents a new snack (e.g., “Glitterberry Muffin”), and the tool describes its magical effects on unicorns—speed boost, extra sparkle, or rainbow trail!
+- Pegasus Flight Tracker  Track a pegasus on a magical journey. The tool shows its route, stops for cloud snacks, and lets the audience decide where it should fly next.
+- Unicorn Parade Planner  Audience helps plan a parade—pick music, decorations, and unicorn formations. The tool generates a parade lineup and a festive summary for all to enjoy.
