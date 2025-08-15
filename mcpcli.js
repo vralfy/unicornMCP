@@ -22,7 +22,7 @@ const logger = (...msg) => {
   console.log(formattedMsg);
 }
 
-logger("Starting UniCorn MCP server with info:", info);
+logger("Starting UniCorn MagicCP server with info:", info);
 
 const server = new McpServer(info.server, {
   capabilities: {
@@ -124,6 +124,7 @@ server.tool(
 
 const transport = new StdioServerTransport()
 await server.connect(transport)
+
 // Tool: List unicorn vehicles and their status
 server.tool(
   "listUnicornVehicles",
@@ -168,6 +169,61 @@ server.tool(
       }] : [{
         type: "text",
         text: "The list of all unicorn vehicles: " + JSON.stringify(vehicles, null, 2)
+      }]
+    };
+  }
+);
+
+// Tool: List magical missions
+server.tool(
+  "listMissions",
+  "Returns a list of magical missions with id, title, description, and required vehicles",
+  {},
+  async () => {
+    // Sparkly mission data
+    const missionsList = [
+      {
+        title: "Unicorn Jam Clearance",
+        description: "A group of unicorns is blocking a rainbow intersection. Dispatch Unicorn Wranglers to clear the jam and restore the flow of sparkly traffic!",
+        vehicles: ["Wrangler", "Guide"]
+      },
+      {
+        title: "Rainbow Road Repair",
+        description: "A section of the rainbow road has faded. Send Rainbow Engineers to restore its vibrant colors and keep the city shining!",
+        vehicles: ["Engineer"]
+      },
+      {
+        title: "Horn Polishing Emergency",
+        description: "A unicorn’s horn has lost its shine before the parade. Assign Horn Polishers for a quick magical fix!",
+        vehicles: ["Polisher"]
+      },
+      {
+        title: "Magical Snack Delivery",
+        description: "Unicorns are hungry and refuse to move. Send Snack Couriers with enchanted treats to get them trotting again!",
+        vehicles: ["Courier"]
+      },
+      {
+        title: "Lost Pegasus Assistance",
+        description: "A confused pegasus is causing traffic chaos. Deploy Pegasus Guides to help and restore harmony!",
+        vehicles: ["Guide", "Wrangler"]
+      }
+    ];
+
+    const missions = new Array(10).fill(0).map((_, i) => {
+      return {
+        ...missionsList[i % missionsList.length],
+        id: 100 + i
+      }
+    });
+
+    logger('Generated magical missions:', JSON.stringify(missions, null, 2));
+    return {
+      content: enableJsonOutput ? [{
+        type: "json",
+        json: missions
+      }] : [{
+        type: "text",
+        text: "The list of all magical missions: " + JSON.stringify(missions, null, 2)
       }]
     };
   }
