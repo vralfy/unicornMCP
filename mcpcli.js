@@ -136,7 +136,7 @@ server.registerPrompt(
             role: "user",
             content: {
               type: "text",
-              text: fs.readFileSync(process.cwd() + '/.vscode/prompts/basic.prompt.md') + txt
+              text: fs.readFileSync(process.cwd() + '/.vscode/prompts/basic.prompt.md') + "\n\n Here is your prompt:" + txt
             }
           }
         ]
