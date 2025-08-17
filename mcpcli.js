@@ -47,11 +47,36 @@ const server = new McpServer(info.server, {
     //   },
     // ],
   },
-})
+});
 
-server.resource(
-  "echo",
+server.registerPrompt(
+  "exampleprompt",
+  {
+    title: "Example Prompt",
+    description: "Generates a prompt",
+  },
+  ({ txt }) => {
+    return {
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: `Please check the text for spelling and grammar errors:\n\n${txt}`
+          }
+        }
+      ]
+    };
+  }
+);
+
+server.registerResource(
+  "exampleresource",
   new ResourceTemplate("echo://{message}", { list: undefined }),
+  {
+    title: "Echo a message",
+    description: "Returns the input message",
+  },
   async (uri, { message }) => ({
     contents: [{
       uri: uri.href,
@@ -60,25 +85,56 @@ server.resource(
   })
 );
 
-server.tool(
-  "echo",
-  "Echo a message backwards",
-  { message: z.string() },
-  async ({ message }) => ({
-    content: [{ type: "text", text: `Tool echo: ${message.split('').reverse().join('')}` }]
-  })
+server.registerTool(
+  "exampletool",
+  {
+    title: "Echo a message backwards",
+    description: "Reverses the input message",
+    argsSchema: { message: z.string() },
+  },
+  async ({ message }) => {
+    return {
+      content: [
+        {
+          type: "text",
+          text: `Tool echo: ${message.split('').reverse().join('')}`
+        }
+      ]
+    };
+  }
 );
 
-server.prompt(
-  "unicornprompt",
-  { txt: z.string() },
-  async ({ txt }) => {
+// Magical transport selection: use HTTP if --rainbowroad flag is set
+let transport;
+if (process.argv.includes('--rainbowroad')) {
+  const app = express();
+  const port = process.env.PORT || 3000;
+  transport = new StreamableHTTPServerTransport({ app });
+  await server.connect(transport);
+  app.listen(port, () => {
+    logger(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
+    console.log(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
+  });
+} else {
+  transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
+// Unicorn Prompt
+server.registerPrompt(
+  "unicorn",
+  {
+    title: "Unicorn Prompt",
+    description: "Generates a prompt for the unicorn.",
+    argsSchema: { txt: z.string() },
+  },
+  ({ txt }) => {
     try {
       return {
         messages: [
           {
             role: "user",
-            context: {
+            content: {
               type: "text",
               text: fs.readFileSync(process.cwd() + '/.vscode/prompts/basic.prompt.md') + txt
             }
@@ -102,37 +158,25 @@ server.prompt(
   }
 );
 
-// Magical transport selection: use HTTP if --rainbowroad flag is set
-let transport;
-if (process.argv.includes('--rainbowroad')) {
-  const app = express();
-  const port = process.env.PORT || 3000;
-  transport = new StreamableHTTPServerTransport({ app });
-  await server.connect(transport);
-  app.listen(port, () => {
-    logger(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
-    console.log(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
-  });
-} else {
-  transport = new StdioServerTransport();
-  await server.connect(transport);
-}
-
 // New prompt: Unicorn Name Generator
-server.prompt(
+server.registerPrompt(
   "unicornNameGenerator",
   {
-    color: z.string(),
-    food: z.string(),
-    mood: z.string(),
-    expertise: z.string()
+    title: "Unicorn Name Generator",
+    description: "Generates a name for a unicorn based on its attributes.",
+    argsSchema: {
+      color: z.string(),
+      food: z.string(),
+      mood: z.string(),
+      expertise: z.string()
+    }
   },
-  async ({ color, food, mood, expertise }) => {
+  ({ color, food, mood, expertise }) => {
     return {
       messages: [
         {
           role: "user",
-          context: {
+          content: {
             type: "text",
             text: `Please give me a name for a unicorn 🦄✨ Its favorite color is ${color}, its favorite food is ${food}, its mood is ${mood}, and its an expert in ${expertise}.`
           }
@@ -143,15 +187,18 @@ server.prompt(
 );
 
 // New prompt: send Unicorns to missions
-server.prompt(
-  "sendUnicorns",
-  {},
+server.registerPrompt(
+  "unicornSend",
+  {
+    title: "Send Unicorns to Missions",
+    description: "Sends available unicorns to their respective missions.",
+  },
   async () => {
     return {
       messages: [
         {
           role: "user",
-          context: {
+          content: {
             type: "text",
             text: `Check for missions and send unicorn vehicles. Try to accomplish all missions in the most performant way. Do not send busy unicorns or those which are under maintenance. Do not send a unicorn twice.`
           }
@@ -162,10 +209,13 @@ server.prompt(
 );
 
 // Tool: List unicorn vehicles and their status
-server.tool(
-  "listUnicornVehicles",
-  "Returns a list of unicorn vehicles and their status",
-  {},
+server.registerTool(
+  "unicornListVehicles",
+  {
+    title: "List Unicorn Vehicles",
+    description: "Retrieves the current status of all unicorn vehicles.",
+    inputSchema: {}
+  },
   async () => {
     // Example unicorn vehicles data
     const vehicles = [];
@@ -215,10 +265,13 @@ server.tool(
 );
 
 // Tool: List magical missions
-server.tool(
-  "listMissions",
-  "Returns a list of magical missions with id, title, description, and required vehicles",
-  {},
+server.registerTool(
+  "unicornListMissions",
+  {
+    title: "List Magical Missions",
+    description: "Returns a list of magical missions with id, title, description, and required vehicles",
+    inputSchema: {}
+  },
   async () => {
     // Sparkly mission data
     const missionsList = [
@@ -270,10 +323,16 @@ server.tool(
 );
 
 // Tool: Assign unicorn vehicles to a mission
-server.tool(
-  "assignVehiclesToMission",
-  "Assigns an array of unicorn vehicles to a unicorn mission by mission ID.",
-  { missionId: z.number(), vehicles: z.array(z.string()) },
+server.registerTool(
+  "unicornAssignVehicles",
+  {
+    title: "Assign Vehicles to Mission",
+    description: "Assigns an array of unicorn vehicles to a unicorn mission by mission ID.",
+    inputSchema: {
+      missionId: z.number(),
+      vehicles: z.array(z.string())
+    }
+  },
   async ({ missionId, vehicles }) => {
     if (!vehicles.length) {
       logger('No vehicles assigned to mission', missionId);
