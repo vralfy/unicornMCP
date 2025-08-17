@@ -49,6 +49,24 @@ const server = new McpServer(info.server, {
   },
 });
 
+// Magical transport selection: use HTTP if --rainbowroad flag is set
+if (process.argv.includes('--rainbowroad')) {
+  const app = express();
+  const port = process.env.PORT || 3000;
+  const transport = new StreamableHTTPServerTransport({ app });
+  await server.connect(transport);
+  app.use(express.json());
+  app.listen(port, () => {
+    logger(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
+    console.log(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
+  });
+} else {
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
+/********** Examples **********/
+
 server.registerPrompt(
   "exampleprompt",
   {
@@ -104,22 +122,6 @@ server.registerTool(
   }
 );
 
-// Magical transport selection: use HTTP if --rainbowroad flag is set
-if (process.argv.includes('--rainbowroad')) {
-  const app = express();
-  const port = process.env.PORT || 3000;
-  const transport = new StreamableHTTPServerTransport({ app });
-  await server.connect(transport);
-  app.use(express.json());
-  app.listen(port, () => {
-    logger(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
-    console.log(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
-  });
-} else {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-}
-
 // Unicorn Prompt
 server.registerPrompt(
   "unicorn",
@@ -157,6 +159,8 @@ server.registerPrompt(
     }
   }
 );
+
+/********** UniCornWorld **********/
 
 // New prompt: Unicorn Name Generator
 server.registerPrompt(
