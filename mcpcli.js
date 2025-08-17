@@ -105,18 +105,18 @@ server.registerTool(
 );
 
 // Magical transport selection: use HTTP if --rainbowroad flag is set
-let transport;
 if (process.argv.includes('--rainbowroad')) {
   const app = express();
   const port = process.env.PORT || 3000;
-  transport = new StreamableHTTPServerTransport({ app });
+  const transport = new StreamableHTTPServerTransport({ app });
   await server.connect(transport);
+  app.use(express.json());
   app.listen(port, () => {
     logger(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
     console.log(`🦄 Rainbow Road activated! MCP server is trotting at http://localhost:${port}`);
   });
 } else {
-  transport = new StdioServerTransport();
+  const transport = new StdioServerTransport();
   await server.connect(transport);
 }
 
