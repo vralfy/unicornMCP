@@ -1,7 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import express from "express";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import fs from "fs"
 
 import { mcpTools } from './mods/tools.ts';
@@ -14,13 +13,7 @@ config.pwd = process.cwd();
 config.logfile = config.logfile || config.pwd + "/mcp.log";
 config.args = process.argv;
 
-fs.writeFileSync(config.logfile, "", { encoding: 'utf8', flag: 'w+' }, (err: any) => {
-  if (err) {
-    console.error("Error writing", config.logfile, err);
-  } else {
-    console.log(config.logfile, "created successfully.");
-  }
-});
+fs.writeFileSync(config.logfile, "", { encoding: 'utf8', flag: 'w+' });
 
 const mcpServer = new McpServer(config.server, {
   capabilities: {
