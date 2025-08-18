@@ -28,7 +28,14 @@
 		"rainbowroad": {
 			"url": "http://localhost:3000/mcp",
 			"type": "http"
-		}
+		},
+		"blender": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": [
+        "/mnt/c/Users/xcx2440/Documents/git/docker/project/praktikum/.vscode/blender-mcp.zsh"
+      ]
+    }
 	},
 	"inputs": []
 }
