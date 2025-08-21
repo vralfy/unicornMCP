@@ -10,6 +10,7 @@ export const mcpExamples = {
         {
           title: "Example Prompt",
           description: "Generates a prompt",
+          argsSchema: {}
         },
         ({ txt }) => {
           return {
@@ -46,7 +47,7 @@ export const mcpExamples = {
         {
           title: "Echo a message backwards",
           description: "Reverses the input message",
-          argsSchema: { message: z.string() },
+          inputSchema: { message: z.string() },
         },
         async ({ message }) => {
           message = message || "";

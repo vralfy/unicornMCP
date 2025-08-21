@@ -7,8 +7,10 @@ import { mcpTools } from './mods/tools.ts';
 import { mcpExamples } from "./mods/example.ts";
 import { mcpUnicorn } from "./mods/unicorn.ts";
 import { mcpExpress } from "./mods/express.ts";
+import { mcpLocation } from "./mods/location.ts";
+import { mcpWeather } from "./mods/weather.ts";
 
-const config = JSON.parse(fs.readFileSync("config.json", "utf-8"))
+const config = JSON.parse(fs.readFileSync("config.json", "utf-8"));
 config.pwd = process.cwd();
 config.logfile = config.logfile || config.pwd + "/mcp.log";
 config.args = process.argv;
@@ -32,10 +34,24 @@ const mcpServer = new McpServer(config.server, {
 const expressServer = express();
 
 mcpTools.register(config, mcpServer, expressServer).then(() => {});
+// Check if secrets.json exists and load it if present
+if (fs.existsSync(config.pwd + "/secrets.json")) {
+  try {
+    config.secrets = JSON.parse(fs.readFileSync("secrets.json", "utf-8"));
+    config.echo("Loaded magical secrets from secrets.json");
+  } catch (err) {
+    config.echo("Failed to read secrets.json:", err);
+  }
+} else {
+  config.echo("No secrets.json found. Proceeding without magical secrets.");
+}
+
 mcpExpress.setup(config, mcpServer, expressServer).then(() => {});
 
 mcpExamples.register(config, mcpServer, expressServer).then(() => {});
 mcpUnicorn.register(config, mcpServer, expressServer).then(() => {});
+mcpLocation.register(config, mcpServer, expressServer).then(() => {});
+mcpWeather.register(config, mcpServer, expressServer).then(() => {});
 
 config.logger("Starting UniCorn MagicCP server with info:", config);
 
