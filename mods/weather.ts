@@ -9,11 +9,11 @@ export const mcpWeather = {
       mcp.registerTool(
         "weather",
         {
-          title: "Get Weather",
-          description: "Retrieves the current weather",
+          title: "Get Weather by Coordinates",
+          description: "Retrieves the current weather using specific latitude and longitude coordinates.",
           inputSchema: {
-            lat: z.number().min(-90).max(90),
-            lon: z.number().min(-180).max(180),
+            lat: z.number().min(-90).max(90).describe("Latitude coordinate (-90 to 90)"),
+            lon: z.number().min(-180).max(180).describe("Longitude coordinate (-180 to 180)"),
           },
         },
         async ({ lat, lon }) => {
@@ -47,10 +47,10 @@ export const mcpWeather = {
       mcp.registerTool(
         "weathercity",
         {
-          title: "Get Weather by City name",
-          description: "Retrieves the current weather in a given city",
+          title: "Get Weather by City Name",
+          description: "Retrieves the current weather by city name.",
           inputSchema: {
-            city: z.string().min(2).max(100),
+            city: z.string().min(2).max(100).describe("City name (e.g., 'Berlin', 'New York')"),
           },
         },
         async ({ city }) => {

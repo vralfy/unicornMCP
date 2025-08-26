@@ -3,7 +3,7 @@ import * as fs from 'fs';
 export const mcpTools = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      config.logprefixes = config.logprefixes ?? ['🦄 ', '✨ ', '🌈 ', '🦋 ', '💫 '];
+      config.logprefixes = config.logprefixes ?? ['🦄 ', '✨ ', '🌈 ', '🦋 ', '💫 ', '💖 ', '🌸 '];
       console.log("🦄 Registering MCP tools...");
       config.echo = (...msg) => {
         config.logger(...msg);
