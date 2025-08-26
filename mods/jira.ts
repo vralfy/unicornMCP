@@ -15,28 +15,38 @@ export const mcpJira = {
       // test();
 
       mcp.registerResource(
-        "jira_ticket",
-        new ResourceTemplate("jira_ticket://{message}", { list: undefined }),
+        config.prefix + "jiraticket",
+        new ResourceTemplate(config.prefix + "jiraticket://{message}", { list: undefined }),
         {
           title: "Jira Ticket",
           description: "Returns a jira ticket",
         },
         async (uri, { message }) => {
-          config.echo('Retrieving Jira ticket:', message, uri);
-          const ticket = await jira.findIssue(message);
-          const url = config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/' + message;
-          config.logger("Jira ticket retrieved:", uri, message, url, ticket);
-          return {
-            contents: [{
-              uri: url,
-              text: JSON.stringify(ticket, null, 2)
-            }]
-          };
+          const url = config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/' + (message || '');
+          config.echo('Retrieving Jira ticket:', uri.href, url);
+          try {
+            const ticket = await jira.findIssue(message);
+            ticket.url = url;
+            return {
+              contents: [{
+                uri: uri.href,
+                text: JSON.stringify(ticket, null, 2)
+              }]
+            };
+          } catch(e) {
+            return {
+              contents: [{
+                uri: uri.href,
+                text: e.message
+              }]
+            };
+
+          }
         }
       );
 
       mcp.registerTool(
-        "jira_ticket",
+        config.prefix + "jira_ticket",
         {
           title: "Jira Ticket",
           description: "Retrieves information about a Jira ticket",
@@ -46,17 +56,28 @@ export const mcpJira = {
           message = message || "";
           const url = config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/' + message;
           config.echo('Retrieving Jira ticket:', message, url);
-
-          const ticket = await jira.findIssue(message);
-          ticket.url = url;
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(ticket, null, 2)
-              }
-            ]
-          };
+          try {
+            const ticket = await jira.findIssue(message);
+            ticket.url = url;
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: JSON.stringify(ticket, null, 2)
+                }
+              ]
+            };
+          } catch (e) {
+            config.logger("Error retrieving Jira ticket:", e.message);
+            return {
+              content: [
+                {
+                  type: "text",
+                  text: e.message
+                }
+              ]
+            };
+          }
         }
       );
 

@@ -7,7 +7,7 @@ export const mcpWeather = {
       config.echo("Registering MCP weather...");
 
       mcp.registerTool(
-        "weather",
+        config.prefix + "weather",
         {
           title: "Get Weather by Coordinates",
           description: "Retrieves the current weather using specific latitude and longitude coordinates.",
@@ -17,6 +17,7 @@ export const mcpWeather = {
           },
         },
         async ({ lat, lon }) => {
+          config.echo("Calling", config.prefix + "weather");
           const apiKey = config.secrets.openweathermap?.apiKey;
           if (!apiKey) {
             config.logger("No API key found for OpenWeatherMap");
@@ -44,8 +45,9 @@ export const mcpWeather = {
           };
         }
       );
+
       mcp.registerTool(
-        "weathercity",
+        config.prefix + "weathercity",
         {
           title: "Get Weather by City Name",
           description: "Retrieves the current weather by city name.",
@@ -54,6 +56,7 @@ export const mcpWeather = {
           },
         },
         async ({ city }) => {
+          config.echo("Calling", config.prefix + "weathercity");
           const apiKey = config.secrets?.openweathermap?.apiKey;
           if (!apiKey) {
             config.logger("No API key found for OpenWeatherMap");

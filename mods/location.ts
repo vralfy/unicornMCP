@@ -7,13 +7,14 @@ export const mcpLocation = {
       config.echo("Registering MCP location...");
 
       mcp.registerTool(
-        "geolocation",
+        config.prefix + "geolocation",
         {
           title: "Get Geolocation",
           description: "Retrieves the user's geolocation",
           inputSchema: {},
         },
         async ({ message }) => {
+          config.echo("Calling", config.prefix + "geolocation");
           message = message || "";
           // Get geolocation by http://ip-api.com/json/
           const response = await fetch("http://ip-api.com/json/");

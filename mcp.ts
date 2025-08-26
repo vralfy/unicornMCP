@@ -15,6 +15,12 @@ const config = JSON.parse(fs.readFileSync("config.json", "utf-8"));
 config.pwd = process.cwd();
 config.logfile = config.logfile || config.pwd + "/mcp.log";
 config.args = process.argv;
+config.prefix = config.prefix || '';
+if (process.argv.includes('--rainbowroad')) {
+  config.prefix = 'rb_' + config.prefix || '';
+}
+
+config.prefix = config.prefix.replaceAll(/_/g, '');
 
 fs.writeFileSync(config.logfile, "", { encoding: 'utf8', flag: 'w+' });
 
@@ -55,7 +61,7 @@ mcpLocation.register(config, mcpServer, expressServer).then(() => {});
 mcpWeather.register(config, mcpServer, expressServer).then(() => {});
 mcpJira.register(config, mcpServer, expressServer).then(() => {});
 
-config.logger("Starting UniCorn MagicCP server with info:", config);
+config.logger("Starting UniCorn MagicCP server with info:", {...config, secrets: '---secret---' });
 
 // Magical transport selection: use HTTP if --rainbowroad flag is set
 if (process.argv.includes('--rainbowroad')) {

@@ -6,13 +6,14 @@ export const mcpExamples = {
     try {
       config.echo("Registering MCP examples...");
       mcp.registerPrompt(
-        "exampleprompt",
+        config.prefix + "exampleprompt",
         {
           title: "Example Prompt",
           description: "Generates a prompt",
-          argsSchema: {}
+          argsSchema: { txt: z.string().describe("The text to check") }
         },
         ({ txt }) => {
+          config.echo("Calling", config.prefix + "exampleprompt");
           return {
             messages: [
               {
@@ -28,28 +29,32 @@ export const mcpExamples = {
       );
 
       mcp.registerResource(
-        "exampleresource",
-        new ResourceTemplate("echo://{message}", { list: undefined }),
+        config.prefix + "exampleresource",
+        new ResourceTemplate(config.prefix + "exampleresource://{message}", { list: undefined }),
         {
           title: "Echo a message",
           description: "Returns the input message",
         },
-        async (uri, { message }) => ({
-          contents: [{
-            uri: uri.href,
-            text: `Resource echo: ${message}`
-          }]
-        })
+        async (uri, { message }) => {
+          config.echo("Calling", config.prefix + "exampleresource");
+          return {
+            contents: [{
+              uri: uri.href, // this needs to be uri.href
+              text: `Resource echo: ${message}`
+            }]
+          }
+        }
       );
 
       mcp.registerTool(
-        "exampletool",
+        config.prefix + "exampletool",
         {
           title: "Echo a message backwards",
           description: "Reverses the input message",
           inputSchema: { message: z.string() },
         },
         async ({ message }) => {
+          config.echo("Calling", config.prefix + "exampletool");
           message = message || "";
           return {
             content: [

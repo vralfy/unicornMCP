@@ -7,7 +7,7 @@ export const mcpUnicorn = {
       config.echo("Registering MCP Unicorn world...");
       // Unicorn Prompt
       mcp.registerPrompt(
-        "unicorn",
+        config.prefix + "unicorn",
         {
           title: "Unicorn Prompt",
           description: "Generates a prompt for the unicorn.",
@@ -15,6 +15,7 @@ export const mcpUnicorn = {
         },
         ({ txt }) => {
           try {
+            config.echo("Calling", config.prefix + "unicorn");
             return {
               messages: [
                 {
@@ -27,7 +28,6 @@ export const mcpUnicorn = {
               ]
             };
           } catch (e) {
-            config.logger('Error creating unicorn prompt:', e.message);
             return {
               messages: [
                 {
@@ -45,7 +45,7 @@ export const mcpUnicorn = {
 
       // New prompt: Unicorn Name Generator
       mcp.registerPrompt(
-        "unicornNameGenerator",
+        config.prefix + "unicornNameGenerator",
         {
           title: "Unicorn Name Generator",
           description: "Generates a name for a unicorn based on its attributes.",
@@ -57,6 +57,7 @@ export const mcpUnicorn = {
           }
         },
         ({ color, food, mood, expertise }) => {
+          config.echo("Calling", config.prefix + "unicornNameGenerator");
           return {
             messages: [
               {
@@ -73,12 +74,13 @@ export const mcpUnicorn = {
 
       // New prompt: send Unicorns to missions
       mcp.registerPrompt(
-        "unicornSend",
+        config.prefix + "unicornSend",
         {
           title: "Send Unicorns to Missions",
           description: "Sends available unicorns to their respective missions.",
         },
         async () => {
+          config.echo("Calling", config.prefix + "unicornSend");
           return {
             messages: [
               {
@@ -95,13 +97,14 @@ export const mcpUnicorn = {
 
       // Tool: List unicorn vehicles and their status
       mcp.registerTool(
-        "unicornListVehicles",
+        config.prefix + "unicornListVehicles",
         {
           title: "List Unicorn Vehicles",
           description: "Retrieves the current status of all unicorn vehicles.",
           inputSchema: {}
         },
         async () => {
+          config.echo("Calling", config.prefix + "unicornListVehicles");
           // Example unicorn vehicles data
           const vehicles: any[] = [];
           const statuses = [
@@ -151,13 +154,14 @@ export const mcpUnicorn = {
 
       // Tool: List magical missions
       mcp.registerTool(
-        "unicornListMissions",
+        config.prefix + "unicornListMissions",
         {
           title: "List Magical Missions",
           description: "Returns a list of magical missions with id, title, description, and required vehicles",
           inputSchema: {}
         },
         async () => {
+          config.echo("Calling", config.prefix + "unicornListMissions");
           // Sparkly mission data
           const missionsList = [
             {
@@ -209,7 +213,7 @@ export const mcpUnicorn = {
 
       // Tool: Assign unicorn vehicles to a mission
       mcp.registerTool(
-        "unicornAssignVehicles",
+        config.prefix + "unicornAssignVehicles",
         {
           title: "Assign Vehicles to Mission",
           description: "Assigns an array of unicorn vehicles to a unicorn mission by mission ID.",
@@ -219,6 +223,7 @@ export const mcpUnicorn = {
           }
         },
         async ({ missionId, vehicles }) => {
+          config.echo("Calling", config.prefix + "unicornAssignVehicles");
           if (!vehicles.length) {
             config.logger('No vehicles assigned to mission', missionId);
             return {
