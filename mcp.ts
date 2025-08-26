@@ -9,6 +9,7 @@ import { mcpUnicorn } from "./mods/unicorn.ts";
 import { mcpExpress } from "./mods/express.ts";
 import { mcpLocation } from "./mods/location.ts";
 import { mcpWeather } from "./mods/weather.ts";
+import { mcpJira } from "./mods/jira.ts";
 
 const config = JSON.parse(fs.readFileSync("config.json", "utf-8"));
 config.pwd = process.cwd();
@@ -52,6 +53,7 @@ mcpExamples.register(config, mcpServer, expressServer).then(() => {});
 mcpUnicorn.register(config, mcpServer, expressServer).then(() => {});
 mcpLocation.register(config, mcpServer, expressServer).then(() => {});
 mcpWeather.register(config, mcpServer, expressServer).then(() => {});
+mcpJira.register(config, mcpServer, expressServer).then(() => {});
 
 config.logger("Starting UniCorn MagicCP server with info:", config);
 
