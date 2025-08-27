@@ -8,25 +8,30 @@ export const mcpJira = {
       config.echo("Registering MCP Jira...");
       const jira = new JiraApi(config.secrets.jira.server);
 
-      // const test = async () => {
-      //   const ticket = await jira.findIssue('KFIFA-4418');
-      //   console.log(ticket, config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/');
-      // };
-      // test();
+      const getTicket = async (id, recursive) => {
+        const url = config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/' + (id || '');
+        config.echo('Retrieving Jira ticket:', url);
+        const ticket = await jira.findIssue(id);
+        ticket.url = url;
+
+        if (recursive && ticket?.fields?.parent?.key) {
+          ticket.parent = await getTicket(ticket.fields.parent.key, false);
+        }
+
+        return ticket;
+      };
 
       mcp.registerResource(
-        config.prefix + "jiraticket",
-        new ResourceTemplate(config.prefix + "jiraticket://{message}", { list: undefined }),
+        config.prefix + "jira",
+        new ResourceTemplate(config.prefix + "jira://ticket/{message}", { list: undefined }),
         {
           title: "Jira Ticket",
           description: "Returns a jira ticket",
         },
         async (uri, { message }) => {
-          const url = config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/' + (message || '');
-          config.echo('Retrieving Jira ticket:', uri.href, url);
+
           try {
-            const ticket = await jira.findIssue(message);
-            ticket.url = url;
+            const ticket = await getTicket(message, true);
             return {
               contents: [{
                 uri: uri.href,
@@ -46,19 +51,15 @@ export const mcpJira = {
       );
 
       mcp.registerTool(
-        config.prefix + "jira_ticket",
+        config.prefix + "jiraticket",
         {
           title: "Jira Ticket",
           description: "Retrieves information about a Jira ticket",
           inputSchema: { message: z.string().describe('The ID of the Jira ticket to retrieve') },
         },
         async ({ message }) => {
-          message = message || "";
-          const url = config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/' + message;
-          config.echo('Retrieving Jira ticket:', message, url);
           try {
-            const ticket = await jira.findIssue(message);
-            ticket.url = url;
+            const ticket = await getTicket(message, true);
             return {
               content: [
                 {
