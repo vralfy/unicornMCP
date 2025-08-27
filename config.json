@@ -11,5 +11,12 @@
     "allowedOrigins": ["http://localhost:3000"]
   },
   "logfile": "mcp.log",
-  "enableJsonOutput": false
+  "enableJsonOutput": false,
+  "mods": [
+    { "file": "mods/examples.ts", "className": "mcpExamples"},
+    { "file": "mods/unicorn.ts", "className": "mcpUnicorn"},
+    { "file": "mods/location.ts", "className": "mcpLocation"},
+    { "file": "mods/weather.ts", "className": "mcpWeather"},
+    { "file": "mods/jira.ts", "className": "mcpJira"}
+  ]
 }

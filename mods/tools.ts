@@ -16,7 +16,7 @@ export const mcpTools = {
 
       config.logger = (...msg) => {
         const timestamp = new Date().toISOString();
-        const formatedParts = (msg ?? []).map(part => JSON.stringify(part));
+        const formatedParts = (msg ?? []).map(part => JSON.stringify(part, null, 2));
         const formattedMsg = `[${timestamp}] ${formatedParts.join(' ')}\n`;
         fs.appendFileSync(config.logfile, formattedMsg, 'utf8', { flag: 'a' });
       };

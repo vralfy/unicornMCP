@@ -4,7 +4,6 @@ import * as fs from 'fs';
 export const mcpUnicorn = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      config.echo("Registering MCP Unicorn world...");
       // Unicorn Prompt
       mcp.registerPrompt(
         config.prefix + "unicorn",

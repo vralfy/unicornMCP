@@ -5,7 +5,6 @@ import z from "zod";
 export const mcpJira = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      config.echo("Registering MCP Jira...");
       const jira = new JiraApi(config.secrets.jira.server);
 
       const getTicket = async (id, recursive) => {

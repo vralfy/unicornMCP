@@ -4,8 +4,6 @@ import z from "zod";
 export const mcpWeather = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      config.echo("Registering MCP weather...");
-
       mcp.registerTool(
         config.prefix + "weather",
         {

@@ -4,8 +4,6 @@ import z from "zod";
 export const mcpLocation = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      config.echo("Registering MCP location...");
-
       mcp.registerTool(
         config.prefix + "geolocation",
         {

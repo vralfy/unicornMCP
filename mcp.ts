@@ -4,12 +4,7 @@ import express from "express";
 import fs from "fs"
 
 import { mcpTools } from './mods/tools.ts';
-import { mcpExamples } from "./mods/example.ts";
-import { mcpUnicorn } from "./mods/unicorn.ts";
 import { mcpExpress } from "./mods/express.ts";
-import { mcpLocation } from "./mods/location.ts";
-import { mcpWeather } from "./mods/weather.ts";
-import { mcpJira } from "./mods/jira.ts";
 
 const config = JSON.parse(fs.readFileSync("config.json", "utf-8"));
 config.pwd = process.cwd();
@@ -19,7 +14,6 @@ config.prefix = config.prefix || '';
 if (process.argv.includes('--rainbowroad')) {
   config.prefix = 'rb_' + config.prefix || '';
 }
-
 config.prefix = config.prefix.replaceAll(/_/g, '');
 
 fs.writeFileSync(config.logfile, "", { encoding: 'utf8', flag: 'w+' });
@@ -41,6 +35,7 @@ const mcpServer = new McpServer(config.server, {
 const expressServer = express();
 
 mcpTools.register(config, mcpServer, expressServer).then(() => {});
+
 // Check if secrets.json exists and load it if present
 if (fs.existsSync(config.pwd + "/secrets.json")) {
   try {
@@ -53,18 +48,35 @@ if (fs.existsSync(config.pwd + "/secrets.json")) {
   config.echo("No secrets.json found. Proceeding without magical secrets.");
 }
 
+if (config.secrets?.mods) {
+  config.mods = config.secrets.mods;
+}
+
 mcpExpress.setup(config, mcpServer, expressServer).then(() => {});
 
-mcpExamples.register(config, mcpServer, expressServer).then(() => {});
-mcpUnicorn.register(config, mcpServer, expressServer).then(() => {});
-mcpLocation.register(config, mcpServer, expressServer).then(() => {});
-mcpWeather.register(config, mcpServer, expressServer).then(() => {});
-mcpJira.register(config, mcpServer, expressServer).then(() => {});
+await Promise.all(
+  (config.mods ?? []).map(async (mod) => {
+    const { file, className } = mod;
+    try {
+      config.echo(`Try to register magical module: ${className}`);
+      const importedMod = await import(config.pwd + "/" + file);
+      if (importedMod && typeof importedMod[className]?.register === 'function') {
+        await importedMod[className].register(config, mcpServer, expressServer);
+        config.echo(`Registered magical module: ${className}`);
+      } else {
+        config.echo(`Module ${className} does not export a register function.`);
+      }
+    } catch (err) {
+      config.echo(`Failed to load module ${className}:`, err, 'from', file);
+    }
+  })
+);
 
-config.logger("Starting UniCorn MagicCP server with info:", {...config, secrets: '---secret---' });
-
+config.echo("Starting UniCorn MagicCP server...");
+config.logger({...config, secrets: '---secret---' });
 // Magical transport selection: use HTTP if --rainbowroad flag is set
 if (process.argv.includes('--rainbowroad')) {
+  config.echo("Activating Rainbow Road...");
   // const transport = new StreamableHTTPServerTransport({ app: expressServer });
   // await mcpServer.connect(transport);
   const port = config.port || 3000;
@@ -79,6 +91,7 @@ if (process.argv.includes('--rainbowroad')) {
   config.echo("Activating Standard Input/Output Unicorn...");
   const transport = new StdioServerTransport();
   await mcpServer.connect(transport);
+  config.echo("Standard Input/Output Unicorn is waiting for requests");
 }
 
 // This server was brought to you by

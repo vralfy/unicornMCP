@@ -4,7 +4,6 @@ import z from "zod";
 export const mcpExamples = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      config.echo("Registering MCP examples...");
       mcp.registerPrompt(
         config.prefix + "exampleprompt",
         {
