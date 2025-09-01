@@ -13,6 +13,7 @@ export const mcpLeitstellenspiel = {
         '```',
         '* do not modify any files',
         '* Ask for mission id if not provided',
+        '* if its a landing page the value is null',
         '* there is an mcp tool available to get the mission data. Use it!',
         '* explain the user which vehicle types are used in the mission',
         '* do not translate mission title',
