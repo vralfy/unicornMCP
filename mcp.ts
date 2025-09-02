@@ -49,7 +49,19 @@ if (fs.existsSync(config.pwd + "/secrets.json")) {
 }
 
 if (config.secrets?.mods) {
-  config.mods = config.secrets.mods;
+  config.secrets.mods.forEach((m) => {
+    // check if there is already a mod with the same className
+    if (!config.mods.find((mod) => mod.className === m.className)) {
+      config.mods.push(m);
+    } else {
+      // replace existing mod
+      const existingMod = config.mods.find((mod) => mod.className === m.className);
+      if (existingMod) {
+        Object.assign(existingMod, m);
+      }
+    }
+  });
+  config.mods = config.mods.filter((m) => !m.disabled);
 }
 
 mcpExpress.setup(config, mcpServer, expressServer).then(() => {});
