@@ -17,6 +17,15 @@
     { "file": "mods/unicorn.ts", "className": "mcpUnicorn"},
     { "file": "mods/location.ts", "className": "mcpLocation"},
     { "file": "mods/weather.ts", "className": "mcpWeather"},
-    { "file": "mods/jira.ts", "className": "mcpJira"}
-  ]
+    { "file": "mods/jira.ts", "className": "mcpJira"},
+    { "file": "mods/rss.ts", "className": "mcpRSS"}
+  ],
+  "rss": {
+    "feeds": [
+      { "category": "technology", "id": "spiegelnetzwelt", "name": "Spiegel Netzwelt", "url": "https://www.spiegel.de/netzwelt/index.rss"},
+      { "category": "technology", "id": "heiseonline", "name": "heise online News", "url": "https://www.heise.de/rss/heise.rdf"},
+      { "category": "technology", "id": "golem", "name": "Golem.de", "url": "https://rss.golem.de/rss.php?feed=RSS2.0"},
+      { "category": "games", "id": "pixelnostalgie", "name": "Pixel Nostalgie", "url": "https://feeds.feedburner.com/pixelnostalgie"}
+    ]
+  }
 }
