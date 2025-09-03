@@ -80,8 +80,21 @@ export const mcpTools = {
 
   setup: (config) => {
     try {
-      config.pwd = process.cwd();
+      config.server = config.server || {
+        name: "Unicorn MCP Server",
+        version: "1.0.0"
+      };
+      config.port = config.port || 3000;
+      config.path = config.path || '/mcp';
       config.logfile = config.logfile || config.pwd + "/mcp.log";
+      config.enableJsonOutput = config.enableJsonOutput || false;
+      config.transportOptions = config.transportOptions || {
+        enableDnsRebindingProtection: false,
+        allowedHosts: ["localhost", "127.0.0.1", "localhost:3000"],
+        allowedOrigins: ["http://localhost:3000"]
+      };
+
+      config.pwd = process.cwd();
       config.args = process.argv;
       config.prefix = config.prefix || '';
       config.logprefixes = config.logprefixes ?? ['🦄 ', '✨ ', '🌈 ', '🦋 ', '💫 ', '💖 ', '🌸 '];

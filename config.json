@@ -1,17 +1,4 @@
 {
-  "server": {
-    "name": "Unicorn MCP Server",
-    "version": "1.0.0"
-  },
-  "port": 3000,
-  "path": "/mcp",
-  "transportOptions": {
-    "enableDnsRebindingProtection": false,
-    "allowedHosts": ["localhost", "127.0.0.1", "localhost:3000"],
-    "allowedOrigins": ["http://localhost:3000"]
-  },
-  "logfile": "mcp.log",
-  "enableJsonOutput": false,
   "mods": [
     { "file": "mods/examples.ts", "className": "mcpExamples"},
     { "file": "mods/unicorn.ts", "className": "mcpUnicorn"},
