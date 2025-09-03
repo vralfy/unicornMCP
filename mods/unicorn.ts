@@ -14,7 +14,7 @@ export const mcpUnicorn = {
         },
         ({ txt }) => {
           try {
-            config.echo("Calling", config.prefix + "unicorn");
+            config.info("Calling", config.prefix + "unicorn");
             return {
               messages: [
                 {
@@ -56,7 +56,7 @@ export const mcpUnicorn = {
           }
         },
         ({ color, food, mood, expertise }) => {
-          config.echo("Calling", config.prefix + "unicornNameGenerator");
+          config.info("Calling", config.prefix + "unicornNameGenerator");
           return {
             messages: [
               {
@@ -79,7 +79,7 @@ export const mcpUnicorn = {
           description: "Sends available unicorns to their respective missions.",
         },
         async () => {
-          config.echo("Calling", config.prefix + "unicornSend");
+          config.info("Calling", config.prefix + "unicornSend");
           return {
             messages: [
               {
@@ -103,7 +103,7 @@ export const mcpUnicorn = {
           inputSchema: {}
         },
         async () => {
-          config.echo("Calling", config.prefix + "unicornListVehicles");
+          config.info("Calling", config.prefix + "unicornListVehicles");
           // Example unicorn vehicles data
           const vehicles: any[] = [];
           const statuses = [
@@ -138,7 +138,7 @@ export const mcpUnicorn = {
               status: statuses[Math.floor(Math.random() * statuses.length)]
             });
           }
-          config.logger('Generated unicorn vehicles:', JSON.stringify(vehicles, null, 2));
+          config.log('Generated unicorn vehicles:', JSON.stringify(vehicles, null, 2));
           return {
             content: config.enableJsonOutput ? [{
               type: "json",
@@ -160,7 +160,7 @@ export const mcpUnicorn = {
           inputSchema: {}
         },
         async () => {
-          config.echo("Calling", config.prefix + "unicornListMissions");
+          config.info("Calling", config.prefix + "unicornListMissions");
           // Sparkly mission data
           const missionsList = [
             {
@@ -197,7 +197,7 @@ export const mcpUnicorn = {
             }
           });
 
-          config.logger('Generated magical missions:', JSON.stringify(missions, null, 2));
+          config.log('Generated magical missions:', JSON.stringify(missions, null, 2));
           return {
             content: config.enableJsonOutput ? [{
               type: "json",
@@ -222,9 +222,9 @@ export const mcpUnicorn = {
           }
         },
         async ({ missionId, vehicles }) => {
-          config.echo("Calling", config.prefix + "unicornAssignVehicles");
+          config.info("Calling", config.prefix + "unicornAssignVehicles");
           if (!vehicles.length) {
-            config.logger('No vehicles assigned to mission', missionId);
+            config.warn('No vehicles assigned to mission', missionId);
             return {
               content: [{
                 type: "text",
@@ -233,7 +233,7 @@ export const mcpUnicorn = {
             };
           }
           // Log the magical assignment
-          config.echo(`✨ Mission ${missionId} assigned to vehicles: ${vehicles.join(", ")}`);
+          config.log(`✨ Mission ${missionId} assigned to vehicles: ${vehicles.join(", ")}`);
           // Return a sparkly confirmation
           return {
             content: [{

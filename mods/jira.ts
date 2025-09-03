@@ -9,7 +9,7 @@ export const mcpJira = {
 
       const getTicket = async (id, recursive) => {
         const url = config.secrets.jira.server.protocol + '://' + config.secrets.jira.server.host + '/browse/' + (id || '');
-        config.echo('Retrieving Jira ticket:', url);
+        config.info('Retrieving Jira ticket:', url);
         const ticket = await jira.findIssue(id);
         ticket.url = url;
 
@@ -68,7 +68,7 @@ export const mcpJira = {
               ]
             };
           } catch (e) {
-            config.logger("Error retrieving Jira ticket:", e.message);
+            config.error("Error retrieving Jira ticket:", e.message);
             return {
               content: [
                 {

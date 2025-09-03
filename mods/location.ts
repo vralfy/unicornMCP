@@ -12,12 +12,12 @@ export const mcpLocation = {
           inputSchema: {},
         },
         async ({ message }) => {
-          config.echo("Calling", config.prefix + "geolocation");
+          config.info("Calling", config.prefix + "geolocation");
           message = message || "";
           // Get geolocation by http://ip-api.com/json/
           const response = await fetch("http://ip-api.com/json/");
           const data = await response.json();
-          config.logger(`Geolocation retrieved: ${JSON.stringify(data)}`);
+          config.log(`Geolocation retrieved: ${JSON.stringify(data)}`);
           return {
             content: [
               {

@@ -5,7 +5,7 @@ import express from 'express';
 export const mcpExpress = {
   setup: (config, mcp, app) => new Promise((resolve, reject) => {
     try {
-      config.echo("Setting up Express server...");
+      config.info("Setting up Express server...");
       // 🌈 Mister Fluffy here! Let's sprinkle some magic and disable host check for our Express server!
       // This allows requests from any host, perfect for unicorns galloping in from all corners of the magical city!
       app.set('trust proxy', true); // Accept requests from any host/proxy
@@ -16,7 +16,7 @@ export const mcpExpress = {
         // to ensure complete isolation. A single instance would cause request ID collisions
         // when multiple clients connect concurrently.
         const body = req.body;
-        config.logger('Received POST MCP request', body);
+        config.log('Received POST MCP request', body);
 
         const transport: StreamableHTTPServerTransport = new StreamableHTTPServerTransport({
           ...(config.transportOptions.sessionIdGenerator ? {sessionIdGenerator: () => randomUUID()} : {}),
@@ -31,7 +31,7 @@ export const mcpExpress = {
           await transport.handleRequest(req, res, body);
         } catch (error) {
           if (!res.headersSent) {
-            config.echo('Error handling POST MCP request', error);
+            config.error('Error handling POST MCP request', error);
             res.status(500).json({
               jsonrpc: '2.0',
               error: {
@@ -47,7 +47,7 @@ export const mcpExpress = {
       // SSE notifications not supported in stateless mode
       app.get(config.path, async (req: express.Request, res: express.Response) => {
         const body = req.body;
-        config.logger('Received GET MCP request', req.headers, body);
+        config.log('Received GET MCP request', req.headers, body);
         res.writeHead(405).end(JSON.stringify({
           jsonrpc: "2.0",
           error: {
@@ -60,7 +60,7 @@ export const mcpExpress = {
 
       app.delete(config.path, async (req: express.Request, res: express.Response) => {
         const body = req.body;
-        config.logger('Received DELETE MCP request', body);
+        config.log('Received DELETE MCP request', body);
         res.writeHead(405).end(JSON.stringify({
           jsonrpc: "2.0",
           error: {
@@ -71,7 +71,7 @@ export const mcpExpress = {
         }));
       });
     } catch (error) {
-      config.echo('Error registering Express routes', error);
+      config.error('Error registering Express routes', error);
       reject(error);
     }
   }),

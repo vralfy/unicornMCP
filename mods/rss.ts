@@ -23,7 +23,7 @@ export const mcpRSS = {
           inputSchema: { },
         },
         async ({ }) => {
-          config.echo("Calling", config.prefix + "getfeeds");
+          config.info("Calling", config.prefix + "getfeeds");
           return {
             content: [
               {
@@ -43,7 +43,7 @@ export const mcpRSS = {
           inputSchema: { id: z.string() },
         },
         async ({ id }) => {
-          config.echo("Calling", config.prefix + "getfeed");
+          config.info("Calling", config.prefix + "getfeed");
 
           const feed = await getFeed(rssConfig.feeds.find(f => f.id === id).url);
           return {

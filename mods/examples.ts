@@ -12,7 +12,7 @@ export const mcpExamples = {
           argsSchema: { txt: z.string().describe("The text to check") }
         },
         ({ txt }) => {
-          config.echo("Calling", config.prefix + "exampleprompt");
+          config.info("Calling", config.prefix + "exampleprompt");
           return {
             messages: [
               {
@@ -35,7 +35,7 @@ export const mcpExamples = {
           description: "Returns the input message",
         },
         async (uri, { message }) => {
-          config.echo("Calling", config.prefix + "exampleresource");
+          config.info("Calling", config.prefix + "exampleresource");
           return {
             contents: [{
               uri: uri.href, // this needs to be uri.href
@@ -53,7 +53,7 @@ export const mcpExamples = {
           inputSchema: { message: z.string() },
         },
         async ({ message }) => {
-          config.echo("Calling", config.prefix + "exampletool");
+          config.info("Calling", config.prefix + "exampletool");
           message = message || "";
           return {
             content: [

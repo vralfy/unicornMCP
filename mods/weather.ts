@@ -15,10 +15,10 @@ export const mcpWeather = {
           },
         },
         async ({ lat, lon }) => {
-          config.echo("Calling", config.prefix + "weather");
+          config.info("Calling", config.prefix + "weather");
           const apiKey = config.secrets.openweathermap?.apiKey;
           if (!apiKey) {
-            config.logger("No API key found for OpenWeatherMap");
+            config.error("No API key found for OpenWeatherMap");
             return {
               content: [
                 {
@@ -32,7 +32,7 @@ export const mcpWeather = {
           url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
           const response = await fetch(url);
           const data = await response.json();
-          config.logger(`Weather retrieved: ${url} ${JSON.stringify(data)}`);
+          config.log(`Weather retrieved: ${url} ${JSON.stringify(data)}`);
           return {
             content: [
               {
@@ -54,10 +54,10 @@ export const mcpWeather = {
           },
         },
         async ({ city }) => {
-          config.echo("Calling", config.prefix + "weathercity");
+          config.info("Calling", config.prefix + "weathercity");
           const apiKey = config.secrets?.openweathermap?.apiKey;
           if (!apiKey) {
-            config.logger("No API key found for OpenWeatherMap");
+            config.error("No API key found for OpenWeatherMap");
             return {
               content: [
                 {
@@ -71,7 +71,7 @@ export const mcpWeather = {
           url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
           const response = await fetch(url);
           const data = await response.json();
-          config.logger(`Weather retrieved: ${url} ${JSON.stringify(data)}`);
+          config.log(`Weather retrieved: ${url} ${JSON.stringify(data)}`);
           return {
             content: [
               {

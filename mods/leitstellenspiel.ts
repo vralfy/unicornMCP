@@ -44,7 +44,7 @@ export const mcpLeitstellenspiel = {
         const url = 'https://www.leitstellenspiel.de/einsaetze/' + id;
 
         if (!fs.existsSync(file)) {
-          config.echo("Creating mission file", file, 'from', url);
+          config.log("Creating mission file", file, 'from', url);
           const response = await fetch(url);
           const ok = response.ok;
           const html = await response.text();
@@ -92,7 +92,7 @@ export const mcpLeitstellenspiel = {
           inputSchema: { message: z.string() },
         },
         async ({ message }) => {
-          config.echo("Calling", config.prefix + "leitstellenspiel_get_mission");
+          config.info("Calling", config.prefix + "leitstellenspiel_get_mission");
           message = message || "";
           const html = await getMission(message);
           return {
@@ -114,7 +114,7 @@ export const mcpLeitstellenspiel = {
           argsSchema: { txt: z.string().describe("Mission ID") }
         },
         ({ txt }) => {
-          config.echo("Calling", config.prefix + name + "_create_scene");
+          config.info("Calling", config.prefix + name + "_create_scene");
           return {
             messages: [
               {
