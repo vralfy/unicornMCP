@@ -4,6 +4,7 @@
     { "file": "mods/unicorn.ts", "className": "mcpUnicorn"},
     { "file": "mods/location.ts", "className": "mcpLocation"},
     { "file": "mods/weather.ts", "className": "mcpWeather"},
+    { "file": "mods/confluence.ts", "className": "mcpConfluence"},
     { "file": "mods/jira.ts", "className": "mcpJira"},
     { "file": "mods/rss.ts", "className": "mcpRSS"}
   ],

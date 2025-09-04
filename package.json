@@ -22,6 +22,7 @@
   "homepage": "https://github.com/vralfy/unicorn#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
+    "confluence-api": "^1.0.0",
     "express": "^5.0.0",
     "jira-client": "^8.0.0",
     "node-fetch": "^3.0.0",

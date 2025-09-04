@@ -5,7 +5,12 @@ import z from "zod";
 export const mcpJira = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      const jira = new JiraApi(config.secrets.jira.server);
+      const jira = new JiraApi({
+        "protocol": "https",
+        "apiVersion": 2,
+        "strictSSL": true,
+        ...config.secrets.jira.server
+      });
       const callbacks = {};
 
       [
