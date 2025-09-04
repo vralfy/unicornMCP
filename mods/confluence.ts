@@ -12,14 +12,14 @@ export const mcpConfluence = {
       const callbacks = {};
 
       [
-        { name: 'Space', jiraMethod: 'getSpace', description: null, args: { space: z.string().describe('The ID of the Confluence space to retrieve') } },
-        { name: 'PageContent', jiraMethod: 'getContentById', description: null, args: { pageId: z.string().describe('The ID of the Confluence page to retrieve') } },
-        { name: 'PageLabels', jiraMethod: 'getLabels', description: null, args: { pageId: z.string().describe('The ID of the Confluence page to retrieve') } },
-        { name: 'search', jiraMethod: 'search', description: 'Search for confluence article', args: { query: z.string().describe('The search query') } },
+        { name: 'Space', method: 'getSpace', description: null, args: { space: z.string().describe('The ID of the Confluence space to retrieve') } },
+        { name: 'PageContent', method: 'getContentById', description: null, args: { pageId: z.string().describe('The ID of the Confluence page to retrieve') } },
+        { name: 'PageLabels', method: 'getLabels', description: null, args: { pageId: z.string().describe('The ID of the Confluence page to retrieve') } },
+        { name: 'search', method: 'search', description: 'Search for confluence article', args: { query: z.string().describe('The search query') } },
       ].forEach(item => {
         callbacks['get' + item.name] = async (...args) => {
           return new Promise((resolve, reject) => {
-            confluence[item.jiraMethod](...args, (err, data) => {
+            confluence[item.method](...args, (err, data) => {
               if (err) {
                 reject(new Error(`Error retrieving Confluence ${item.name}: ${err.message}`));
               } else {
