@@ -84,6 +84,10 @@ export const mcpTools = {
         name: "Unicorn MCP Server",
         version: "1.0.0"
       };
+      config.pwd = process.cwd();
+      config.args = process.argv;
+      config.prefix = config.prefix || '';
+
       config.port = config.port || 3000;
       config.path = config.path || '/mcp';
       config.logfile = config.logfile || config.pwd + "/mcp.log";
@@ -94,9 +98,6 @@ export const mcpTools = {
         allowedOrigins: ["http://localhost:3000"]
       };
 
-      config.pwd = process.cwd();
-      config.args = process.argv;
-      config.prefix = config.prefix || '';
       config.logprefixes = config.logprefixes ?? ['🦄 ', '✨ ', '🌈 ', '🦋 ', '💫 ', '💖 ', '🌸 '];
       config.echo = (level, ...msg) => {
         level = level || console.log;
