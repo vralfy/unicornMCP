@@ -1,10 +1,11 @@
-import { ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import Bitbucket from "bitbucket";
 import z from "zod";
+import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpBitbucket = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
+      const pluginName = 'Bitbucket';
       const bitbucket = new Bitbucket.Bitbucket({
         request: {
           timeout: 20,
@@ -21,76 +22,15 @@ export const mcpBitbucket = {
         { name: 'Project', section: 'projects', method: 'getProject', description: null, args: { ...workspaceDescription, project_key: z.string().describe('Project key') } },
         { name: 'Branches', section: 'repositories', method: 'listBranches', description: null, args: { ...workspaceDescription, repo_slug: z.string().describe('Repository name') } },
       ].forEach(item => {
-        callbacks['get' + item.name] = async (args) => {
-          console.error('callback', item.name, args)
+        callbacks[item.name] = async (args) => {
           return new Promise((resolve, reject) => {
             bitbucket[item.section][item.method]({...args, ...( enableWorkspace ? {} : { workspace: defaultWorkspace })}).then((data) => resolve(data)).catch(err => reject(err));
           });
         };
 
-        const resourceUrl = Object.keys(item.args ?? {}).length ? '/' + Object.keys(item.args ?? {}).map(key => `{${key}}`).join('/') : '';
-        // register resource
-        mcp.registerResource(
-          config.prefix + "bitbucket" + item.name.toLowerCase() + "resource",
-          new ResourceTemplate(config.prefix + "bitbucket://" + item.name.toLowerCase() + resourceUrl, { list: undefined }),
-          {
-            title: "Bitbucket " + item.name,
-            description: item.description ?? "Returns a bitbucket " + item.name.toLowerCase(),
-          },
-          async (uri, args) => {
-            try {
-              config.info('Retrieving Bitbucket ' + item.name + ':', args);
-              const returnvalue = await callbacks['get' + item.name](args);
-              return {
-                contents: [{
-                  uri: uri.href,
-                  text: JSON.stringify(returnvalue, null, 2)
-                }]
-              };
-            } catch (e) {
-              return {
-                contents: [{
-                  uri: uri.href,
-                  text: e.message
-                }]
-              };
+        registerMCPResource(config, mcp, callbacks, pluginName, item);
+        registerMCPTool(config, mcp, callbacks, pluginName, item);
 
-            }
-          }
-        );
-
-        mcp.registerTool(
-          config.prefix + "bitbucket" + item.name.toLowerCase(),
-          {
-            title: "Bitbucket " + item.name,
-            description: item.description ?? "Returns a bitbucket " + item.name.toLowerCase(),
-            inputSchema: item.args ?? {},
-          },
-          async (args) => {
-            try {
-              config.info('Retrieving Bitbucket ' + item.name + ':', args);
-              const returnvalue = await callbacks['get' + item.name](args);
-              return {
-                content: [
-                  {
-                    type: "text",
-                    text: JSON.stringify(returnvalue, null, 2)
-                  }
-                ]
-              };
-            } catch (e) {
-              config.error("Error retrieving Confluence " + item.name.toLowerCase() + ":", e.message);
-              return {
-                content: [
-                  {
-                    type: "text",
-                    text: e.message
-                  }
-                ]
-              };
-            }
-          }
-        );
       });
 
       resolve(null);

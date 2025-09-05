@@ -1,11 +1,11 @@
-import { ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import z from "zod";
 import fs from "fs";
+import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpLeitstellenspiel = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-      const name = 'leitstellenspiel';
+      const pluginName = 'Leitstellenspiel';
       const createSceneInstruction = [
         'Create a scene entry from scene description. The scene format is as follows:',
         '```json',
@@ -36,12 +36,13 @@ export const mcpLeitstellenspiel = {
         '* add one NEF if probability is given and at least 50'
       ];
 
-      const getMission = async (id) => {
+      const callbacks = {}
+      callbacks['Mission'] = async (args) => {
         if (!fs.existsSync(config.pwd + '/tmp/missions')) {
           fs.mkdirSync(config.pwd + '/tmp/missions', { recursive: true });
         }
-        const file = config.pwd + '/tmp/missions/' + id + '.html';
-        const url = 'https://www.leitstellenspiel.de/einsaetze/' + id;
+        const file = config.pwd + '/tmp/missions/' + args.missionId + '.html';
+        const url = 'https://www.leitstellenspiel.de/einsaetze/' + args.missionId;
 
         if (!fs.existsSync(file)) {
           config.log("Creating mission file", file, 'from', url);
@@ -55,66 +56,22 @@ export const mcpLeitstellenspiel = {
         return html;
       }
 
-      mcp.registerResource(
-        config.prefix + name,
-        new ResourceTemplate(config.prefix + name + "://mission/{message}", { list: undefined }),
-        {
-          title: "Leitstellenspiel Mission",
-          description: "Returns the mission details",
-        },
-        async (uri, { message }) => {
-          try {
-            const html = await getMission(message);
-
-            return {
-              contents: [{
-                uri: uri.href, // this needs to be uri.href
-                text: html
-              }]
-            }
-          } catch (e) {
-            config.error("Error creating mission file", e);
-            return {
-              contents: [{
-                uri: uri.href, // this needs to be uri.href
-                text: `Error creating mission file: ${message}`
-              }]
-            }
-          }
-        }
-      );
-
-      mcp.registerTool(
-        config.prefix + "leitstellenspiel_get_mission",
-        {
-          title: "Get Leitstellenspiel mission",
-          description: "Retrieves the details of a Leitstellenspiel mission",
-          inputSchema: { message: z.string() },
-        },
-        async ({ message }) => {
-          config.info("Calling", config.prefix + "leitstellenspiel_get_mission");
-          message = message || "";
-          const html = await getMission(message);
-          return {
-            content: [
-              {
-                type: "text",
-                text: html
-              }
-            ]
-          };
-        }
-      );
+      [
+        { name: 'Mission', description: "Returns the mission details", args: { missionId: z.string().describe("Mission ID") } },
+      ].forEach(item => {
+        registerMCPResource(config, mcp, callbacks, pluginName, item);
+        registerMCPTool(config, mcp, callbacks, pluginName, item);
+      });
 
       mcp.registerPrompt(
-        config.prefix + name + "_create_scene",
+        config.prefix + pluginName + "_create_scene",
         {
           title: "Create a scene for Leitstellenspiel",
           description: "Generates a scene for a Leitstellenspiel mission",
           argsSchema: { txt: z.string().describe("Mission ID") }
         },
         ({ txt }) => {
-          config.info("Calling", config.prefix + name + "_create_scene");
+          config.info("Calling", config.prefix + pluginName + "_create_scene");
           return {
             messages: [
               {

@@ -1,61 +1,30 @@
-import { ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 import z from "zod";
 import Parser from 'rss-parser';
+import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpRSS = {
   // https://www.rss-verzeichnis.de/ << great list of rss feeds
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
-
+      const pluginName = 'RSSFeeds';
       const rssConfig = config.secrets?.rss ?? config.rss;
-
-      const getFeed = async (url) => {
+      const callbacks = {};
+      callbacks['getFeeds'] = async (args) => {
+        return rssConfig.feeds;
+      }
+      callbacks['getFeed'] = async (args) => {
         const parser = new Parser();
-        const feed = await parser.parseURL(url);
-        return feed;
+        return await parser.parseURL(args.url);
       }
 
-      mcp.registerTool(
-        config.prefix + "getfeeds",
-        {
-          title: "Get RSS feeds",
-          description: "Returns a list of all available feeds",
-          inputSchema: { },
-        },
-        async ({ }) => {
-          config.info("Calling", config.prefix + "getfeeds");
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(rssConfig.feeds)
-              }
-            ]
-          };
-        }
-      );
-
-      mcp.registerTool(
-        config.prefix + "getfeed",
-        {
-          title: "Get one specific rss feed",
-          description: "Retrieves the details of a specific RSS feed",
-          inputSchema: { id: z.string() },
-        },
-        async ({ id }) => {
-          config.info("Calling", config.prefix + "getfeed");
-
-          const feed = await getFeed(rssConfig.feeds.find(f => f.id === id).url);
-          return {
-            content: [
-              {
-                type: "text",
-                text: JSON.stringify(feed)
-              }
-            ]
-          };
-        }
-      );
+      [
+        { name: 'getFeeds', description: null, args: {} },
+        { name: 'getFeed', description: null, args: { url: z.string().describe("The URL of the RSS feed to retrieve") } },
+      ].forEach(item => {
+        registerMCPResource(config, mcp, callbacks, pluginName, item);
+        registerMCPTool(config, mcp, callbacks, pluginName, item);
+      });
 
       resolve(null);
     } catch (error) {
