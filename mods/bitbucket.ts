@@ -6,6 +6,11 @@ export const mcpBitbucket = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
       const pluginName = 'Bitbucket';
+      if (!config.secrets?.bitbucket?.server) {
+        config.error("No Bitbucket server config found");
+        resolve(null);
+        return;
+      }
       const bitbucket = new Bitbucket.Bitbucket({
         request: {
           timeout: 20,

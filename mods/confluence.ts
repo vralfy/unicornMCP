@@ -1,11 +1,16 @@
 import Confluence from "confluence-api";
-import z from "zod";
+import { z } from "zod";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpConfluence = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
       const pluginName = 'Confluence';
+      if (!config.secrets?.confluence?.server) {
+        config.error("No Confluence server config found");
+        resolve(null);
+        return;
+      }
       const confluence = new Confluence({
         "version": 4,
         ...config.secrets.confluence.server

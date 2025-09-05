@@ -6,6 +6,11 @@ export const mcpJira = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
       const pluginName = 'Jira';
+      if (!config.secrets?.jira?.server) {
+        config.error("No Jira server config found");
+        resolve(null);
+        return;
+      }
       const jira = new JiraApi({
         "protocol": "https",
         "apiVersion": 2,

@@ -5,7 +5,13 @@ export const mcpWeather = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
     try {
       const pluginName = 'Weather';
-      const apiKey = config.secrets.openweathermap?.apiKey;
+      const apiKey = config.secrets?.openweathermap?.apiKey;
+      if (!apiKey) {
+        config.error("No API key found for OpenWeatherMap");
+        resolve(null);
+
+        return;
+      }
 
       const callbacks = {};
       callbacks['coordinates'] = async (args) => {

@@ -2,11 +2,11 @@
   "name": "unicorn",
   "version": "1.0.0",
   "description": "A simple unicorn project",
-  "main": "mcpcli.js",
+  "main": "mcp.ts",
   "type": "module",
   "scripts": {
-    "cli": "node mcp.ts",
-    "server": "node mcp.ts --rainbowroad",
+    "cli": "node --experimental-strip-types mcp.ts",
+    "server": "node --experimental-strip-types mcp.ts --rainbowroad",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,6 +31,8 @@
     "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^24.3.0"
+    "@types/node": "^24.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
   }
 }
