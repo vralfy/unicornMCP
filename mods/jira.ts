@@ -7,8 +7,7 @@ export const mcpJira = {
     try {
       const pluginName = 'Jira';
       if (!config.secrets?.jira?.server) {
-        config.error("No Jira server config found");
-        resolve(null);
+        reject(new Error("No Jira server config found"));
         return;
       }
       const jira = new JiraApi({

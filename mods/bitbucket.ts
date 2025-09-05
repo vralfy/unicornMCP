@@ -7,8 +7,7 @@ export const mcpBitbucket = {
     try {
       const pluginName = 'Bitbucket';
       if (!config.secrets?.bitbucket?.server) {
-        config.error("No Bitbucket server config found");
-        resolve(null);
+        reject(new Error("No Bitbucket server config found"));
         return;
       }
       const bitbucket = new Bitbucket.Bitbucket({

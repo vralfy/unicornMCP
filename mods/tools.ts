@@ -117,9 +117,10 @@ export const mcpTools = {
       };
 
       config.log = config.logger;
-      config.info = (...msg) => config.echo(console.log, ...msg);
-      config.warn = (...msg) => config.echo(console.warn, ...msg);
-      config.error = (...msg) => config.echo(console.error, ...msg);
+      config.info = (...msg) => config.echo(console.log, "ℹ️", ...msg);
+      config.success = (...msg) => config.echo(console.log, "✅", ...msg);
+      config.warn = (...msg) => config.echo(console.warn, "⚠️", ...msg);
+      config.error = (...msg) => config.echo(console.error, "❌", ...msg);
 
       return config;
     } catch (error) {
@@ -133,11 +134,17 @@ export const mcpTools = {
       (config.mods ?? []).map(async (mod) => {
         const { file, className } = mod;
         try {
-          config.info(`Try to register magical module: ${className}`);
+          //config.info(`Try to register magical module: ${className}`);
           const importedMod = await import(config.pwd + "/" + file);
           if (importedMod && typeof importedMod[className]?.register === 'function') {
-            await importedMod[className].register(config, mcp, express);
-            config.info(`Registered magical module: ${className}`);
+            importedMod[className].register(config, mcp, express).then(
+              () => {
+                config.success(`Registered magical module: ${className}`);
+              },
+              (registerErr) => {
+                config.error(`Module ${className} registration rejected:`, registerErr);
+              }
+            );
           } else {
             config.warn(`Module ${className} does not export a register function.`);
           }

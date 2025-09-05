@@ -7,9 +7,7 @@ export const mcpWeather = {
       const pluginName = 'Weather';
       const apiKey = config.secrets?.openweathermap?.apiKey;
       if (!apiKey) {
-        config.error("No API key found for OpenWeatherMap");
-        resolve(null);
-
+        reject(new Error("No API key found for OpenWeatherMap"));
         return;
       }
 

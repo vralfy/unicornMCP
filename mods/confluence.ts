@@ -7,8 +7,7 @@ export const mcpConfluence = {
     try {
       const pluginName = 'Confluence';
       if (!config.secrets?.confluence?.server) {
-        config.error("No Confluence server config found");
-        resolve(null);
+        reject(new Error("No Confluence server config found"));
         return;
       }
       const confluence = new Confluence({
