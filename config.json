@@ -4,9 +4,10 @@
     { "file": "mods/unicorn.ts", "className": "mcpUnicorn"},
     { "file": "mods/location.ts", "className": "mcpLocation"},
     { "file": "mods/weather.ts", "className": "mcpWeather"},
+    { "file": "mods/bitbucket.ts", "className": "mcpBitbucket"},
     { "file": "mods/confluence.ts", "className": "mcpConfluence"},
     { "file": "mods/jira.ts", "className": "mcpJira"},
-    { "file": "mods/bitbucket.ts", "className": "mcpBitbucket"},
+    { "file": "mods/google.ts", "className": "mcpGoogle"},
     { "file": "mods/rss.ts", "className": "mcpRSS"}
   ],
   "rss": {

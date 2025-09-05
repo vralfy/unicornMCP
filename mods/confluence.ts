@@ -1,5 +1,5 @@
 import Confluence from "confluence-api";
-import { z } from "zod";
+import z from "zod";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpConfluence = {
