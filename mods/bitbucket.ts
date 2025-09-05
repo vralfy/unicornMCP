@@ -7,21 +7,24 @@ export const mcpBitbucket = {
     try {
       const bitbucket = new Bitbucket.Bitbucket({
         request: {
-          timeout: 10,
+          timeout: 20,
         },
         ...config.secrets.bitbucket.server
       });
+
       const callbacks = {};
-      // bitbucket.projects.getProject
+      const defaultWorkspace = config.bitbucket.workspace;
+      const enableWorkspace = !(defaultWorkspace || defaultWorkspace === null);
+      const workspaceDescription = enableWorkspace ? { workspace: z.string().describe('Workspace name') } : {};
       [
-        { name: 'Workspaces', section: 'workspaces', method: 'getWorkspaces', description: null, args: { } },
-        { name: 'Project', section: 'projects', method: 'getProject', description: null, args: { workspace: z.string().describe('Workspace name'), project_key: z.string().describe('Project key') } },
-        { name: 'Branches', section: 'repositories', method: 'listBranches', description: null, args: { workspace: z.string().describe('Workspace name'), repo_slug: z.string().describe('Repository name') } },
+        ...(enableWorkspace ? [{ name: 'Workspaces', section: 'workspaces', method: 'getWorkspaces', description: null, args: { } }] : []),
+        { name: 'Project', section: 'projects', method: 'getProject', description: null, args: { ...workspaceDescription, project_key: z.string().describe('Project key') } },
+        { name: 'Branches', section: 'repositories', method: 'listBranches', description: null, args: { ...workspaceDescription, repo_slug: z.string().describe('Repository name') } },
       ].forEach(item => {
         callbacks['get' + item.name] = async (args) => {
           console.error('callback', item.name, args)
           return new Promise((resolve, reject) => {
-            bitbucket[item.section][item.method]({...args}).then((data) => resolve(data)).catch(err => reject(err));
+            bitbucket[item.section][item.method]({...args, ...( enableWorkspace ? {} : { workspace: defaultWorkspace })}).then((data) => resolve(data)).catch(err => reject(err));
           });
         };
 
