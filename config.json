@@ -1,6 +1,7 @@
 {
   "mods": [
     { "file": "mods/examples.ts", "className": "mcpExamples"},
+    { "file": "mods/server.ts", "className": "mcpServer"},
     { "file": "mods/unicorn.ts", "className": "mcpUnicorn"},
     { "file": "mods/location.ts", "className": "mcpLocation"},
     { "file": "mods/weather.ts", "className": "mcpWeather"},
