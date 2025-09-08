@@ -1,7 +1,7 @@
 
 import z from "zod";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
-import { Builder, Browser, By } from 'selenium-webdriver'
+import { Builder, Browser, By, Key } from 'selenium-webdriver'
 
 // https://www.npmjs.com/package/selenium-webdriver
 // Downloading chromedriver if needed: https://googlechromelabs.github.io/chrome-for-testing/#stable
@@ -38,6 +38,9 @@ export const mcpSelenium = {
             // })
             .build();
           session["driver"] = webdriver;
+
+          // bring to front
+          await webdriver.manage().window().maximize();
 
           const url = args?.url ?? 'https://www.google.com/ncr';
           config.info('Opened URL for Selenium test:', url);
@@ -211,8 +214,15 @@ export const mcpSelenium = {
           config.info("Entering value with Selenium:", sessionId, xpath, value);
           const element = await session.driver.findElement(By.xpath(xpath));
           await element.clear();
+          // click, and mark all
+          await element.click();
+          await element.sendKeys(Key.chord(Key.CONTROL, 'a'));
+          // enter the value
           await element.sendKeys(value);
+          // blur
+          await element.sendKeys(Key.TAB);
           await session.driver.sleep(config.selenium.wait);
+
           return await callbacks['source'](args);
         } catch (err) {
           config.error("Error entering value with Selenium:", err);
