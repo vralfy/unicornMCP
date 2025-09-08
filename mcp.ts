@@ -5,7 +5,6 @@ import fs from "fs"
 
 import { mcpTools } from './mods/tools.ts';
 import { mcpExpress } from "./mods/express.ts";
-import { mcpGoogle } from "./mods/google.ts";
 
 // Loading configuration
 const config = mcpTools.loadConfig();

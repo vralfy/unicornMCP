@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import * as path from 'path';
 
 export const mcpTools = {
   loadConfigFile: (configFile) => {
@@ -133,9 +134,10 @@ export const mcpTools = {
     await Promise.all(
       (config.mods ?? []).map(async (mod) => {
         const { file, className } = mod;
+        const sourcefile = './' + path.relative(path.resolve(config.pwd + '/mods'), path.resolve(config.pwd + "/" + file));
         try {
           //config.info(`Try to register magical module: ${className}`);
-          const importedMod = await import(config.pwd + "/" + file);
+          const importedMod = await import(sourcefile);
           if (importedMod && typeof importedMod[className]?.register === 'function') {
             importedMod[className].register(config, mcp, express).then(
               () => {
@@ -149,7 +151,7 @@ export const mcpTools = {
             config.warn(`Module ${className} does not export a register function.`);
           }
         } catch (err) {
-          config.error(`Failed to load module ${className}:`, err, 'from', file);
+          config.error(`Failed to load module ${className}:`, err, 'from', sourcefile);
         }
       })
     );
