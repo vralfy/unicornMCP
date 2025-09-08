@@ -1,7 +1,7 @@
 
 import z from "zod";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
-import { Builder, Browser } from 'selenium-webdriver'
+import { Builder, Browser, By } from 'selenium-webdriver'
 
 // https://www.npmjs.com/package/selenium-webdriver
 // Downloading chromedriver if needed: https://googlechromelabs.github.io/chrome-for-testing/#stable
@@ -10,9 +10,18 @@ import { Builder, Browser } from 'selenium-webdriver'
 export const mcpSelenium = {
   sessions: {},
   register: (config, mcp, express) => new Promise((resolve, reject) => {
+    config.selenium = config.selenium || {};
+    config.selenium.timeout = config.selenium.timeout || 2000;
+    config.selenium.wait = config.selenium.wait || 1000;
+
     try {
       const pluginName = 'Selenium';
       const callbacks = {};
+
+      callbacks['sessions'] = async (args) => {
+        return mcpSelenium.sessions;
+      }
+
       callbacks['start'] = async (args) => {
         const sessionId = Math.floor(Math.random() * 1000) + '-' + (new Date()).getTime().toString();
         const session: { [index:string]: any } = { sessionId, args };
@@ -33,7 +42,7 @@ export const mcpSelenium = {
           const url = args?.url ?? 'https://www.google.com/ncr';
           config.info('Opened URL for Selenium test:', url);
           await webdriver.get(url);
-          // await webdriver.sleep(2000);
+          await webdriver.sleep(config.selenium.timeout);
         } catch (error) {
           config.error("Error starting Selenium session:", error);
           delete mcpSelenium.sessions[sessionId];
@@ -65,11 +74,7 @@ export const mcpSelenium = {
           config.error("Error stopping Selenium session:", err);
           return err;
         }
-        return sessionId;
-      }
-
-      callbacks['sessions'] = async (args) => {
-        return mcpSelenium.sessions;
+        return await callbacks['sessions'](args);
       }
 
       callbacks['openUrl'] = async(args) => {
@@ -88,14 +93,15 @@ export const mcpSelenium = {
         try {
           config.info("Navigating with Selenium:", sessionId, url);
           await session.driver.get(url);
+          await session.driver.sleep(config.selenium.wait);
+          return await callbacks['source'](args);
         } catch (err) {
           config.error("Error navigating with Selenium:", err);
           return err;
         }
-        return sessionId;
       }
 
-      callbacks['source'] = async (args) => {
+      callbacks['reload'] = async (args) => {
         const sessionId = args?.sessionId;
 
         if (!sessionId) {
@@ -108,11 +114,108 @@ export const mcpSelenium = {
         }
 
         try {
-          config.info("Getting Selenium page source:", sessionId);
+          config.info("Reloading page with Selenium:", sessionId);
+          await session.driver.navigate().refresh();
+          await session.driver.sleep(config.selenium.wait);
+          return await callbacks['source'](args);
+        } catch (err) {
+          config.error("Error reloading page with Selenium:", err);
+          return err;
+        }
+      }
+
+      callbacks['fullsource'] = async (args) => {
+        const sessionId = args?.sessionId;
+
+        if (!sessionId) {
+          return 'No session ID provided';
+        }
+
+        const session = mcpSelenium.sessions[sessionId];
+        if (!session || !session.driver) {
+          return 'Invalid session ID';
+        }
+
+        try {
+          config.info("Getting full Selenium page source:", sessionId);
           const source = await session.driver.getPageSource();
           return source;
         } catch (err) {
           config.error("Error getting page source with Selenium:", err);
+          return err;
+        }
+      }
+
+      callbacks['source'] = async (args) => {
+        try {
+          let source = await callbacks['fullsource'](args);
+          config.info("Getting stripped Selenium page source:", args?.sessionId);
+          // Strip down to <body> part
+          const bodyMatch = source.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+          if (bodyMatch) {
+            source = bodyMatch[1];
+          }
+          // strip down inline javascript
+          source = source.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, '');
+          // strip down inline css
+          source = source.replace(/<style[^>]*>([\s\S]*?)<\/style>/gi, '');
+          // strip all html comments
+          source = source.replace(/<!--[\s\S]*?-->/gi, '');
+          return source;
+        } catch (err) {
+          config.error("Error getting page source with Selenium:", err);
+          return err;
+        }
+      }
+
+      callbacks['click'] = async (args) => {
+        const sessionId = args?.sessionId;
+        const xpath = args?.xpath;
+
+        if (!sessionId || !xpath) {
+          return 'No session ID or XPath provided';
+        }
+
+        const session = mcpSelenium.sessions[sessionId];
+        if (!session || !session.driver) {
+          return 'Invalid session ID';
+        }
+
+        try {
+          config.info("Clicking element with Selenium:", sessionId, xpath);
+          const element = await session.driver.findElement(By.xpath(xpath));
+          await element.click();
+          await session.driver.sleep(config.selenium.wait);
+          return await callbacks['source'](args);
+        } catch (err) {
+          config.error("Error clicking element with Selenium:", err);
+          return err;
+        }
+      }
+
+      callbacks['enterValue'] = async (args) => {
+        const sessionId = args?.sessionId;
+        const xpath = args?.xpath;
+        const value = args?.value;
+
+        if (!sessionId || !xpath || !value) {
+          return 'No session ID, XPath or value provided';
+        }
+
+        const session = mcpSelenium.sessions[sessionId];
+        if (!session || !session.driver) {
+          return 'Invalid session ID';
+        }
+
+        try {
+          config.info("Entering value with Selenium:", sessionId, xpath, value);
+          const element = await session.driver.findElement(By.xpath(xpath));
+          await element.clear();
+          await element.sendKeys(value);
+          await session.driver.sleep(config.selenium.wait);
+          return await callbacks['source'](args);
+        } catch (err) {
+          config.error("Error entering value with Selenium:", err);
           return err;
         }
       }
@@ -143,8 +246,12 @@ export const mcpSelenium = {
         { name: 'stop', description: "Stop a Selenium session", args: { sessionId: z.string().describe("The ID of the session to stop") } },
         { name: 'sessions', asResource: true, description: "Get all active Selenium sessions", args: {} },
         { name: 'openUrl', description: "Open a URL in the browser", args: { sessionId: z.string().describe("The ID of the session to open the URL in"), url: z.string().describe("The URL to open") } },
+        { name: 'reload', description: "Reload the current page", args: { sessionId: z.string().describe("The ID of the session to reload the page in") } },
+        // { name: 'fullsource', asResource: true, description: "Get the full page source of the current page", args: { sessionId: z.string().describe("The ID of the session to get the full page source from") } },
         { name: 'source', asResource: true, description: "Get the page source of the current page", args: { sessionId: z.string().describe("The ID of the session to get the page source from") } },
-        { name: 'screenshot', asResource: true, description: "Take a screenshot of the current page", args: { sessionId: z.string().describe("The ID of the session to take a screenshot of") } },
+        { name: 'click', description: "Click an element on the page", args: { sessionId: z.string().describe("The ID of the session to click the element in"), xpath: z.string().describe("The XPath of the element to click") } },
+        { name: 'enterValue', description: "Enter a value into an input field", args: { sessionId: z.string().describe("The ID of the session to enter the value in"), xpath: z.string().describe("The XPath of the input field"), value: z.string().describe("The value to enter") } },
+        // { name: 'screenshot', asResource: true, description: "Take a screenshot of the current page", args: { sessionId: z.string().describe("The ID of the session to take a screenshot of") } },
       ].forEach(item => {
         if (item.asResource) {
           registerMCPResource(config, mcp, callbacks, pluginName, item);
@@ -152,7 +259,7 @@ export const mcpSelenium = {
         registerMCPTool(config, mcp, callbacks, pluginName, item);
       });
 
-      const selfTest = async () => {
+      callbacks['selfTest'] = async (args) => {
         const sessionId = await callbacks['start']();
         config.log('Selenium Self Test - Start:', sessionId);
         config.log('Selenium Self Test - Sessions:', await callbacks['sessions']({}));
@@ -160,7 +267,7 @@ export const mcpSelenium = {
         config.log('Selenium Self Test - Screenshot:', await callbacks['screenshot']({ sessionId }));
         config.log('Selenium Self Test - Stop:', await callbacks['stop']({ sessionId }));
       };
-      selfTest();
+      // callbacks['selfTest']();
 
       resolve(null);
     } catch (error) {

@@ -1,5 +1,7 @@
-tmp
 node_modules
+tests
+tmp
+
 package-lock.json
 mcp.log
 secrets.json
