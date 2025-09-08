@@ -9,7 +9,8 @@
     { "file": "mods/confluence.ts", "className": "mcpConfluence"},
     { "file": "mods/jira.ts", "className": "mcpJira"},
     { "file": "mods/google.ts", "className": "mcpGoogle"},
-    { "file": "mods/rss.ts", "className": "mcpRSS"}
+    { "file": "mods/rss.ts", "className": "mcpRSS"},
+    { "file": "mods/selenium.ts", "className": "mcpSelenium"}
   ],
   "rss": {
     "feeds": [

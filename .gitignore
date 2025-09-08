@@ -5,3 +5,4 @@ mcp.log
 secrets.json
 
 chromedriver.exe
+geckodriver.exe
