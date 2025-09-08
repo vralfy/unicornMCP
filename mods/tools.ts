@@ -123,6 +123,24 @@ export const mcpTools = {
       config.warn = (...msg) => config.echo(console.warn, "⚠️", ...msg);
       config.error = (...msg) => config.echo(console.error, "❌", ...msg);
 
+      const prefixFlag = process.argv.find(arg => arg.startsWith('-p'));
+      const prefixFlagLong = process.argv.find(arg => arg.startsWith('--serviceprefix='));
+      if (prefixFlag) {
+        console.log('found -p');
+        const prefix = process.argv[process.argv.indexOf(prefixFlag) + 1];
+        if (prefix) {
+          config.prefix = prefix;
+        }
+      } else if (prefixFlagLong) {
+        const prefix = prefixFlagLong.split('=')[1];
+        if (prefix) {
+          config.prefix = prefix;
+        }
+        config.log('found --serviceprefix=', config.prefix);
+      } else {
+        config.info('No serviceprefix flag found, using default prefix:', config.prefix);
+      }
+
       return config;
     } catch (error) {
       console.error(error);
