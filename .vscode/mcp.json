@@ -21,7 +21,7 @@
       "type": "stdio",
       "command": "wsl",
       "args": [
-        "/mnt/c/Users/xcx2440/Documents/git/docker/project/praktikum/.vscode/blender-mcp.zsh"
+        "/mnt/c/Users/xcx2440/git/docker/project/praktikum/.vscode/blender-mcp.zsh"
       ]
     },
 		// "mcpcli-wsl": {

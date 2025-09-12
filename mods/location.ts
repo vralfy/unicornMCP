@@ -6,8 +6,12 @@ export const mcpLocation = {
       const pluginName = 'Location';
       const callbacks = {};
       callbacks['geoLocation'] = async (args) => {
-        const response = await fetch("http://ip-api.com/json/");
-        return await response.json();
+        try {
+          const response = await fetch("http://ip-api.com/json/");
+          return await response.json();
+        } catch (error) {
+          return error?.message || String(error) || 'Unknown error occurred';
+        }
       }
 
       [
