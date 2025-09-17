@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
+import { setGlobalDispatcher, ProxyAgent } from 'undici';
 import express from "express";
 import fs from "fs"
 
@@ -20,6 +21,12 @@ fs.writeFileSync(config.logfile, "", { encoding: 'utf8', flag: 'w+' });
 
 // Loading secrets
 mcpTools.loadSecrets(config);
+
+if (config.secrets?.proxy) {
+  // Setting up proxy for undici (which powers fetch in Node.js)
+  const proxyAgent = new ProxyAgent(`http://${config.secrets.proxy.host}:${config.secrets.proxy.port}`);
+  setGlobalDispatcher(proxyAgent);
+}
 
 // Setting up MCP and express server
 const mcpServer = new McpServer(config.server, {
