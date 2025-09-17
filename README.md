@@ -36,11 +36,21 @@ The protocol is designed to be:
 
 ### Magical Missions
 
-- **Unicorn Jam Clearance**: Clear unicorn traffic jams with Wranglers and Guides.
-- **Rainbow Road Repair**: Restore faded rainbow roads with Engineers.
-- **Horn Polishing Emergency**: Polish unicorn horns before parades with Polishers.
-- **Magical Snack Delivery**: Deliver enchanted treats with Couriers.
-- **Lost Pegasus Assistance**: Help lost pegasi with Guides and Wranglers.
+- **Unicorn Jam Clearance**:
+  - Clear unicorn traffic jams with Wranglers and Guides.
+  - A group of unicorns is blocking a rainbow intersection. Dispatch “Unicorn Wranglers” to clear the jam.
+- **Rainbow Road Repair**:
+  - Restore faded rainbow roads with Engineers.
+  - A section of the rainbow road has faded. Send “Rainbow Engineers” to restore its colors.
+- **Horn Polishing Emergency**:
+  - Polish unicorn horns before parades with Polishers.
+  - A unicorn’s horn has lost its shine before a parade. Assign “Horn Polishers” for a quick fix.
+- **Magical Snack Delivery**:
+  - Deliver enchanted treats with Couriers.
+  - Unicorns are hungry and refuse to move. Send “Snack Couriers” with enchanted treats.
+- **Lost Pegasus Assistance**:
+  - Help lost pegasi with Guides and Wranglers.
+  - A confused pegasus is causing traffic chaos. Deploy “Pegasus Guides” to help.
 
 ### Vehicles/Units
 
