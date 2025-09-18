@@ -44,7 +44,6 @@ export const mcpWeather = {
           }
           let url = `https://api.openweathermap.org/data/3.0/onecall?q=${args.city}&appid=${apiKey}`;
           url = `https://api.openweathermap.org/data/2.5/weather?q=${args.city}&appid=${apiKey}`;
-          console.error(url);
           const response = await fetch(url);
           return await response.json();
       }
