@@ -23,6 +23,7 @@ fs.writeFileSync(config.logfile, "", { encoding: 'utf8', flag: 'w+' });
 mcpTools.loadSecrets(config);
 
 if (config.secrets?.proxy) {
+  // Setting up proxy for undici (which powers fetch in Node.js)
   config.info(`Setting up proxy`);
   const proxyAgent = new ProxyAgent(`http://${config.secrets.proxy.host}:${config.secrets.proxy.port}`);
   setGlobalDispatcher(proxyAgent);
