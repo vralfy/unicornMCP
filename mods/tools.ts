@@ -2,6 +2,25 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export const mcpTools = {
+  defaultConfig: {
+    "env": {
+      "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+    },
+    "mods": [
+      { "file": "mods/examples.ts", "className": "mcpExamples" },
+      { "file": "mods/server.ts", "className": "mcpServer" },
+      { "file": "mods/unicorn.ts", "className": "mcpUnicorn" },
+      { "file": "mods/location.ts", "className": "mcpLocation" },
+      { "file": "mods/weather.ts", "className": "mcpWeather" },
+      { "file": "mods/bitbucket.ts", "className": "mcpBitbucket" },
+      { "file": "mods/confluence.ts", "className": "mcpConfluence" },
+      { "file": "mods/jira.ts", "className": "mcpJira" },
+      { "file": "mods/google.ts", "className": "mcpGoogle" },
+      { "file": "mods/rss.ts", "className": "mcpRSS" },
+      { "file": "mods/selenium.ts", "className": "mcpSelenium" }
+    ],
+  },
+
   loadConfigFile: (configFile) => {
     if (!fs.existsSync(configFile)) {
       console.error("Config file not found:", configFile);
