@@ -24,7 +24,8 @@ export const mcpTools = {
   loadConfigFile: (configFile) => {
     if (!fs.existsSync(configFile)) {
       console.error("Config file not found:", configFile);
-      process.exit(1);
+      // process.exit(1);
+      return {};
     }
     return JSON.parse(fs.readFileSync(configFile, "utf-8"));
   },

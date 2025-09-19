@@ -8,8 +8,14 @@ import { setGlobalDispatcher, ProxyAgent } from 'undici';
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
-const config = JSON.parse(fs.readFileSync('config.json', "utf-8"));
-config.secrets = JSON.parse(fs.readFileSync('secrets.json', "utf-8"));
+let config: any = {};
+if (fs.existsSync('config.json')) {
+  config = JSON.parse(fs.readFileSync('config.json', "utf-8"));
+}
+if (fs.existsSync('secrets.json')) {
+  config.secrets = JSON.parse(fs.readFileSync('secrets.json', "utf-8"));
+}
+
 if (config.secrets?.proxy) {
   // Setting up proxy for undici (which powers fetch in Node.js)
   console.info(`Setting up proxy`);

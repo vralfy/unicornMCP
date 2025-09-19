@@ -8,7 +8,11 @@ import { mcpTools } from './mods/tools.ts';
 import { mcpExpress } from "./mods/express.ts";
 
 // Loading configuration
-const config = mcpTools.loadConfig();
+const config = {
+  ...mcpTools.defaultConfig,
+  ...mcpTools.loadConfig()
+};
+
 Object.keys(config.env ?? {}).forEach(key => {
   process.env[key] = config.env[key];
 });

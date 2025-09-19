@@ -10,6 +10,7 @@ export const mcpBitbucket = {
         reject(new Error("No Bitbucket server config found"));
         return;
       }
+
       const bitbucket = new Bitbucket.Bitbucket({
         request: {
           timeout: 20,
@@ -18,9 +19,10 @@ export const mcpBitbucket = {
       });
 
       const callbacks = {};
-      const defaultWorkspace = config.bitbucket.workspace;
+      const defaultWorkspace = config.bitbucket?.workspace;
       const enableWorkspace = !(defaultWorkspace || defaultWorkspace === null);
       const workspaceDescription = enableWorkspace ? { workspace: z.string().describe('Workspace name') } : {};
+
       [
         ...(enableWorkspace ? [{ name: 'Workspaces', section: 'workspaces', method: 'getWorkspaces', description: null, args: { } }] : []),
         { name: 'Project', section: 'projects', method: 'getProject', description: null, args: { ...workspaceDescription, project_key: z.string().describe('Project key') } },
@@ -34,7 +36,6 @@ export const mcpBitbucket = {
 
         registerMCPResource(config, mcp, callbacks, pluginName, item);
         registerMCPTool(config, mcp, callbacks, pluginName, item);
-
       });
 
       resolve(null);

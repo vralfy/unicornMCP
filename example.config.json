@@ -2,7 +2,7 @@
   "rss": {
     "feeds": [
       { "category": "technology", "id": "spiegelnetzwelt", "name": "Spiegel Netzwelt", "url": "https://www.spiegel.de/netzwelt/index.rss"},
-      { "category": "technology", "id": "heiseonline", "name": "heise online News", "url": "https://www.heise.de/rss/heise.rdf"},
+      { "category": "technology", "id": "heiseonline", "name": "heise online News", "url": "https://www.heise.de/rss/heise.rdf"}
     ]
   },
   "bitbucket": {
