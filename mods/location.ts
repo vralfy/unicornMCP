@@ -1,3 +1,4 @@
+import { fetch } from "undici";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpLocation = {

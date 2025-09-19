@@ -14,7 +14,7 @@
       "es2022",
       "dom"
     ],
-    "types": [ "node" ],
+    "types": [ "node", "jest" ],
     "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "declaration": false,

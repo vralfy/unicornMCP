@@ -9,6 +9,9 @@ import { mcpExpress } from "./mods/express.ts";
 
 // Loading configuration
 const config = mcpTools.loadConfig();
+Object.keys(config.env ?? {}).forEach(key => {
+  process.env[key] = config.env[key];
+});
 
 // Rainbow Road prefix handling
 if (process.argv.includes('--rainbowroad')) {
@@ -25,7 +28,7 @@ mcpTools.loadSecrets(config);
 if (config.secrets?.proxy) {
   // Setting up proxy for undici (which powers fetch in Node.js)
   config.info(`Setting up proxy`);
-  const proxyAgent = new ProxyAgent(`http://${config.secrets.proxy.host}:${config.secrets.proxy.port}`);
+  const proxyAgent = new ProxyAgent(config.secrets.proxy.http);
   setGlobalDispatcher(proxyAgent);
 }
 

@@ -7,9 +7,10 @@ export interface MCPItem {
 }
 
 export const registerMCPResource = (config: any, mcp: any, callbacks: { [key: string]: Function }, pluginName: string, item: MCPItem) => {
+  if (!mcp) return;
   const resourceUrl = Object.keys(item.args ?? {}).length ? '/' + Object.keys(item.args ?? {}).map(key => `{${key}}`).join('/') : '';
   // register resource
-  mcp.registerResource(
+  mcp?.registerResource(
     config.prefix + pluginName.toLowerCase() + item.name.toLowerCase() + "resource",
     new ResourceTemplate(config.prefix + pluginName.toLowerCase() + "://" + item.name.toLowerCase() + resourceUrl, { list: undefined }),
     {
@@ -41,7 +42,8 @@ export const registerMCPResource = (config: any, mcp: any, callbacks: { [key: st
 }
 
 export const registerMCPTool = (config: any, mcp: any, callbacks: { [key: string]: Function }, pluginName: string, item: MCPItem) => {
-  mcp.registerTool(
+  if (!mcp) return;
+  mcp?.registerTool(
     config.prefix + pluginName.toLowerCase() + item.name.toLowerCase(),
     {
       title: pluginName + " " + item.name,

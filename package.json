@@ -7,7 +7,7 @@
   "scripts": {
     "cli": "node --experimental-strip-types mcp.ts",
     "server": "node --experimental-strip-types mcp.ts --rainbowroad",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --config jest.config.ts --silent --maxWorkers=50% --forceExit --detectOpenHandles --coverage --passWithNoTests"
   },
   "repository": {
     "type": "git",
@@ -33,9 +33,14 @@
     "zod": "^3.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
-    "@types/selenium-webdriver": "^4.1.28",
+    "@types/selenium-webdriver": "^4.0.0",
+    "jest": "^30.0.0",
+    "jest-junit": "^16.0.0",
+    "ts-jest": "^29.4.3",
     "ts-node": "^10.0.0",
+    "tslib": "^2.0.0",
     "typescript": "^5.0.0"
   }
 }

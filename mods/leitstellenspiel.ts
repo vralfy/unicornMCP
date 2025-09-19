@@ -1,5 +1,6 @@
 import z from "zod";
 import fs from "fs";
+import { fetch } from "undici";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpLeitstellenspiel = {
