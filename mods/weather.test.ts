@@ -33,22 +33,16 @@ describe("mcpWeather", () => {
     expect(registerMCPTool).toHaveBeenCalledTimes(2);
   });
 
-  it("returns error if no API key (coordinates)", async () => {
+  it("does not register resources nor tools if API key is missing", async () => {
     config.secrets.openweathermap.apiKey = undefined;
-    await mcpWeather.register(config, mcp, express);
-    const callbacks = (registerMCPResource as jest.Mock).mock.calls[0][2];
-    const result = await callbacks["coordinates"]({ lat: 0, lon: 0 });
-    expect(result.content[0].text).toMatch(/No API key/);
-    expect(config.error).toHaveBeenCalled();
-  });
-
-  it("returns error if no API key (city)", async () => {
-    config.secrets.openweathermap.apiKey = undefined;
-    await mcpWeather.register(config, mcp, express);
-    const callbacks = (registerMCPResource as jest.Mock).mock.calls[1][2];
-    const result = await callbacks["city"]({ city: "Berlin" });
-    expect(result.content[0].text).toMatch(/No API key/);
-    expect(config.error).toHaveBeenCalled();
+    try {
+      await mcpWeather.register(config, mcp, express);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+      expect((e as Error).message).toBe("No API key found for OpenWeatherMap");
+    }
+    expect(registerMCPResource).toHaveBeenCalledTimes(0);
+    expect(registerMCPTool).toHaveBeenCalledTimes(0);
   });
 
   it("fetches weather by coordinates", async () => {

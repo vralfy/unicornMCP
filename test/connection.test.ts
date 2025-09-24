@@ -27,6 +27,10 @@ describe("Connection test suite", () => {
     setGlobalDispatcher(proxyAgent);
   }
 
+  it("should have proxy enabled", () => {
+    expect(config.secrets?.proxy).toBeDefined();
+  });
+
   sitesToCheck.forEach(url => {
     it(`should successfully connect to ${url}`, async () => {
       try {

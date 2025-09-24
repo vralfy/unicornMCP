@@ -32,12 +32,12 @@ describe("mcpRSS module", () => {
   });
 
   it("should parse RSS feed via getFeed callback", async () => {
-  const parser = new Parser();
-  // Mock parser.parseURL with required 'items' property
-  jest.spyOn(parser, "parseURL").mockResolvedValue({ title: "Test Feed", items: [] });
-  let callbacks: any = {};
-  callbacks.getFeed = async (args: any) => await parser.parseURL(args.url);
-  const result = await callbacks.getFeed({ url: "https://test.feed/rss" });
-  expect(result).toEqual({ title: "Test Feed", items: [] });
+    const parser = new Parser();
+    // Mock parser.parseURL with required 'items' property
+    jest.spyOn(parser, "parseURL").mockResolvedValue({ title: "Test Feed", items: [] });
+    let callbacks: any = {};
+    callbacks.getFeed = async (args: any) => await parser.parseURL(args.url);
+    const result = await callbacks.getFeed({ url: "https://test.feed/rss" });
+    expect(result).toEqual({ title: "Test Feed", items: [] });
   });
 });
