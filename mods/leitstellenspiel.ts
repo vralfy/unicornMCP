@@ -34,6 +34,8 @@ export const mcpLeitstellenspiel = {
         '  * Funkstreifenwagen = POL',
         '  * Polizeihubschrauber = POLH',
         '  * Zivilstreifenwagen = ZIV',
+        '  * MTW-TZ = THWMTW',
+        '  * MzGW (FG N) = THWGWN',
         '* if not mapped, provide the full name as key',
         '* if there is a probability of less than 50 for a vehicle, do not add it',
         '* add a RTW for each expected patient, use minimal amount if given',
