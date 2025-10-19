@@ -39,7 +39,7 @@ export const mcpLeitstellenspiel = {
         '  * Zivilstreifenwagen = ZIV',
         '  * MTW-TZ = THWMTW',
         '  * MzGW (FG N) = THWGWN',
-        '  * Anhänger Drucklufterzeugung = DLE',
+        '  * Anhänger Drucklufterzeugung = THWDLE',
         '  * all kinds of K9 units = DOG',
         '  * all kinds of boat units = BOAT',
         '* if not mapped, provide the full name as key',
