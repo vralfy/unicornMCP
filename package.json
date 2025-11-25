@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/vralfy/unicorn#readme",
   "dependencies": {
+    "@gitbeaker/rest": "^43.8.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "bitbucket": "^2.0.0",
     "confluence-api": "^1.0.0",

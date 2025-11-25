@@ -13,7 +13,6 @@
 			}
 		},
 		"rainbowroad": {
-
 			"url": "http://localhost:3000/mcp",
 			"type": "http"
 		},
@@ -23,22 +22,7 @@
       "args": [
         "/mnt/c/Users/xcx2440/git/docker/project/praktikum/.vscode/blender-mcp.zsh"
       ]
-    },
-		// "mcpcli-wsl": {
-		// 	"type": "stdio",
-		// 	"command": "wsl",
-		// 	"args": [
-		// 		"npm",
-		// 		"run",
-		// 		"cli",
-		// 		"--prefix=~/git/docker/project/unicornmcp",
-		// 		"--",
-		// 		"-p", "wsl"
-		// 	],
-		// 	"env": {
-		// 		"NODE_TLS_REJECT_UNAUTHORIZED": "0"
-		// 	}
-		// },
+    }
 	},
 	"inputs": []
 }

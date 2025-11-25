@@ -15,6 +15,7 @@ export const mcpTools = {
       { "file": "mods/bitbucket.ts", "className": "mcpBitbucket" },
       { "file": "mods/confluence.ts", "className": "mcpConfluence" },
       { "file": "mods/jira.ts", "className": "mcpJira" },
+      { "file": "mods/gitlab.ts", "className": "mcpGitlab" },
       { "file": "mods/google.ts", "className": "mcpGoogle" },
       { "file": "mods/rss.ts", "className": "mcpRSS" },
       { "file": "mods/selenium.ts", "className": "mcpSelenium" }

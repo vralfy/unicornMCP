@@ -1,4 +1,7 @@
 ## Concept
+This project should demonstrate the power of MCP by the use of magical unicorns and friendship.
+
+### Unicorn dispatch
 In a magical city, unicorns are the main mode of transportation. Sometimes, unicorn traffic jams occur, rainbow roads need repairs, and unicorns require horn-polishing or magical snack deliveries. The MCP server coordinates all these operations, dispatching specialized teams to resolve unicorn-related incidents.
 
 ## Your personality
