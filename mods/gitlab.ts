@@ -1,6 +1,7 @@
 import z from "zod";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 import { Gitlab } from "@gitbeaker/rest";
+import { fetch, Agent } from "undici";
 
 export const mcpGitlab = {
   register: (config, mcp, express) => new Promise((resolve, reject) => {
@@ -46,16 +47,38 @@ export const mcpGitlab = {
         return null;
       };
 
+      callbacks['fetch'] = async (path, args) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          console.error('🌈 Fetch timeout! Aborting magical request...');
+          controller.abort();
+        }, 10000); // 10 second timeout
+        const agent = new Agent({
+          connect: {
+            rejectUnauthorized: false
+          }
+        });
+        const response = await fetch(serverConfig.host + '/api/v4/' + path, {
+          headers: {
+            'PRIVATE-TOKEN': serverConfig.token,
+          },
+          signal: controller.signal,
+          dispatcher: agent
+        });
+        clearTimeout(timeoutId);
+        return await response.json();
+      };
+
       callbacks['users'] = async (args) => {
         const err = await callbacks['noConfig'](args);
         if (err) return err;
-        return await gitlab.Users.all();
+        return config.gitlab?.useGitBeaker ? await gitlab.Users.all() : await callbacks['fetch']('users', args);
       };
 
       callbacks['projects'] = async (args) => {
         const err = await callbacks['noConfig'](args);
         if (err) return err;
-        return await gitlab.Projects.all({ membership: true, perPage: 500, showExpanded: true });
+        return config.gitlab?.useGitBeaker ? await gitlab.Projects.all({ membership: true, perPage: 500, showExpanded: true }) : await callbacks['fetch']('projects', args);
       };
 
       [
@@ -68,12 +91,14 @@ export const mcpGitlab = {
 
       const tst = async () => {
         try {
-          console.error('DUDE', await callbacks['projects']());
+          console.error(await callbacks['fetch']('projects', {}));
         } catch (error) {
-          console.error('Error in tst:', error);
+          console.error('💫 Error in magical tst function:', error.name, error.message);
+          if (error.name === 'AbortError') {
+            console.error('🦄 Request was aborted due to timeout - the rainbow road is too long!');
+          }
         }
       };
-      tst();
 
       resolve(null);
     } catch (error) {
