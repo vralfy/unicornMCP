@@ -10,7 +10,7 @@ export const mcpLeitstellenspiel = {
       const createSceneInstruction = [
         'Create a scene entry from scene description. The scene format is as follows:',
         '```json',
-        '"{missionId}" : ["type1": 3, "type2": 6], // {mission title}',
+        '"{missionId}" : { "type1": 3, "type2": 6 }, // {mission title}',
         '```',
         '* do not modify any files',
         '* Ask for mission id if not provided',
