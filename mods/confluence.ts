@@ -38,6 +38,11 @@ export const mcpConfluence = {
         registerMCPTool(config, mcp, callbacks, pluginName, item);
       });
 
+      // const tst = async () => {
+      //   callbacks['search']({query: 'example'}).then(config.log).catch(config.error);
+      // }
+      // tst();
+
       resolve(null);
     } catch (error) {
       reject(error);

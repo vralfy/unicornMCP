@@ -30,7 +30,7 @@ if (config.secrets?.proxy) {
 ].forEach(url => {
   console.info('ℹ️', `Testing connection to ${url}`);
   try {
-    fetch(url).then(res => {
+    config.proxy.fetchProxy(url).then(res => {
       if (res.ok) {
         console.info('✅', url, `Connection test successful`);
       } else {

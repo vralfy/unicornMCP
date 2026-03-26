@@ -1,5 +1,4 @@
 import z from "zod";
-import { fetch } from "undici";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpWeather = {
@@ -27,7 +26,7 @@ export const mcpWeather = {
         }
         let url = `https://api.openweathermap.org/data/3.0/onecall?lat=${args.lat}&lon=${args.lon}&appid=${apiKey}`;
         url = `https://api.openweathermap.org/data/2.5/weather?lat=${args.lat}&lon=${args.lon}&appid=${apiKey}`;
-        const response = await fetch(url);
+        const response = await config.proxy.fetchProxy(url);
         return await response.json();
       }
 
@@ -45,7 +44,7 @@ export const mcpWeather = {
           }
           let url = `https://api.openweathermap.org/data/3.0/onecall?q=${args.city}&appid=${apiKey}`;
           url = `https://api.openweathermap.org/data/2.5/weather?q=${args.city}&appid=${apiKey}`;
-          const response = await fetch(url);
+          const response = await config.proxy.fetchProxy(url);
           return await response.json();
       }
 
@@ -65,6 +64,11 @@ export const mcpWeather = {
         registerMCPResource(config, mcp, callbacks, pluginName, item);
         registerMCPTool(config, mcp, callbacks, pluginName, item);
       });
+
+      const tst = async () => {
+        callbacks['city']({ city: 'Berlin' }).then(console.log).catch(console.error);
+      }
+      tst();
 
       resolve(null);
     } catch (error) {

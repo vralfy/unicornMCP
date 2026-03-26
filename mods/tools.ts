@@ -139,6 +139,7 @@ export const mcpTools = {
       };
 
       config.log = config.logger;
+      config.debug = (...msg) => config.echo(console.debug, "🐛", ...msg);
       config.info = (...msg) => config.echo(console.log, "ℹ️", ...msg);
       config.success = (...msg) => config.echo(console.log, "✅", ...msg);
       config.warn = (...msg) => config.echo(console.warn, "⚠️", ...msg);

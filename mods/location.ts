@@ -1,4 +1,3 @@
-import { fetch } from "undici";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpLocation = {
@@ -8,7 +7,7 @@ export const mcpLocation = {
       const callbacks = {};
       callbacks['geoLocation'] = async (args) => {
         try {
-          const response = await fetch("http://ip-api.com/json/");
+          const response = await config.proxy.fetchProxy("http://ip-api.com/json/");
           return await response.json();
         } catch (error) {
           return error?.message || String(error) || 'Unknown error occurred';
@@ -21,6 +20,11 @@ export const mcpLocation = {
         registerMCPResource(config, mcp, callbacks, pluginName, item);
         registerMCPTool(config, mcp, callbacks, pluginName, item);
       });
+
+      const tst = async () => {
+        callbacks['geoLocation']().then(config.log).catch(config.error);
+      }
+      // tst();
 
       resolve(null);
     } catch (error) {

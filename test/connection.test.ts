@@ -1,6 +1,6 @@
 import "tslib";
 import * as fs from "fs";
-import { ProxyAgent, setGlobalDispatcher, fetch } from "undici";
+import { ProxyAgent, setGlobalDispatcher } from "undici";
 
 describe("Connection test suite", () => {
   process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
@@ -34,7 +34,7 @@ describe("Connection test suite", () => {
   sitesToCheck.forEach(url => {
     it(`should successfully connect to ${url}`, async () => {
       try {
-        const res = await fetch(url);
+        const res = await config.proxy.fetchProxy(url);
         expect(res.ok).toBe(true);
       } catch (e: any) {
         throw new Error(`Connection test failed to ${url}: ${e}`);

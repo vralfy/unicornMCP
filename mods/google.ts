@@ -1,5 +1,4 @@
 import z from "zod";
-import { fetch } from "undici";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpGoogle = {
@@ -9,7 +8,7 @@ export const mcpGoogle = {
       const callbacks = {};
       callbacks['search'] = async (args) => {
         return new Promise((resolve, reject) => {
-          fetch('https://google.com/search?q=' + encodeURIComponent(args.query))
+          config.proxy.fetchProxy('https://google.com/search?q=' + encodeURIComponent(args.query))
             .then(response => response.text())
             .then(html => resolve(html))
             .catch(err => reject(err));
@@ -22,6 +21,11 @@ export const mcpGoogle = {
         registerMCPResource(config, mcp, callbacks, pluginName, item);
         registerMCPTool(config, mcp, callbacks, pluginName, item);
       });
+
+      // const tst = async () => {
+      //   callbacks['search']({ query: "example" }).then(config.log).catch(config.error);
+      // }
+      // tst();
 
       resolve(null);
     } catch (error) {

@@ -1,6 +1,5 @@
 import z from "zod";
 import fs from "fs";
-import { fetch } from "undici";
 import { registerMCPResource, registerMCPTool } from "./abstract.ts";
 
 export const mcpLeitstellenspiel = {
@@ -58,7 +57,7 @@ export const mcpLeitstellenspiel = {
 
         if (!fs.existsSync(file)) {
           config.log("Creating mission file", file, 'from', url);
-          const response = await fetch(url);
+          const response = await config.proxy.fetchProxy(url);
           const ok = response.ok;
           const html = await response.text();
           fs.writeFileSync(file, html, { encoding: 'utf8', flag: 'w+' });
@@ -97,6 +96,11 @@ export const mcpLeitstellenspiel = {
           };
         }
       );
+
+      // const tst = async () => {
+      //   callbacks['Mission']({ missionId: 123 }).then(console.log).catch(console.error);
+      // }
+      // tst();
 
       resolve(null);
     } catch (error) {

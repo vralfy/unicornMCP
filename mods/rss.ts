@@ -14,8 +14,11 @@ export const mcpRSS = {
         return rssConfig.feeds;
       }
       callbacks['getFeed'] = async (args) => {
+        const response = await config.proxy.fetchProxy(args.url);
+        const ok = response.ok;
+        const html = await response.text();
         const parser = new Parser();
-        return await parser.parseURL(args.url);
+        return await parser.parseString(html);
       }
 
       [
@@ -25,6 +28,11 @@ export const mcpRSS = {
         registerMCPResource(config, mcp, callbacks, pluginName, item);
         registerMCPTool(config, mcp, callbacks, pluginName, item);
       });
+
+      // const tst = async () => {
+      //   callbacks['getFeed']({ url: 'https://www.spiegel.de/netzwelt/index.rss' }).then(console.log).catch(console.error);
+      // }
+      // tst();
 
       resolve(null);
     } catch (error) {
