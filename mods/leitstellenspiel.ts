@@ -39,6 +39,7 @@ export const mcpLeitstellenspiel = {
         '  * ELW 1 = ELW',
         '  * ELW 2 = ELW2',
         '  * Funkstreifenwagen = POL',
+        '  * Funkstreifenwagen (AP) = POLAP',
         '  * Polizeihubschrauber = POLH',
         '  * Zivilstreifenwagen = ZIV',
         '  * MTW-TZ = THWMTW',
