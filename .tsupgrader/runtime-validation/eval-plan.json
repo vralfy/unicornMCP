@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-08-08T19:55:00Z",
+  "generatedOnPlatform": "darwin",
+  "projectType": "server",
+  "setup": [
+    {
+      "command": "npm",
+      "args": ["install"]
+    }
+  ],
+  "assertions": [
+    {
+      "name": "server-boots-mcp-405",
+      "kind": "http-probe",
+      "startCommand": "npm",
+      "startArgs": ["run", "server"],
+      "url": "http://localhost:3000/mcp",
+      "verificationMethod": "http-status",
+      "expected": "405",
+      "timeoutSeconds": 90
+    },
+    {
+      "name": "tests-pass",
+      "kind": "process",
+      "command": "npm",
+      "args": ["test"],
+      "verificationMethod": "test-results",
+      "expected": "0",
+      "timeoutSeconds": 300
+    }
+  ]
+}

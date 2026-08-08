@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/vralfy/unicorn#readme",
   "dependencies": {
-    "@gitbeaker/rest": "^43.8.0",
+    "@gitbeaker/rest": "^43.0.0",
     "@modelcontextprotocol/sdk": "^1.0.0",
     "bitbucket": "^2.0.0",
     "confluence-api": "^1.0.0",
@@ -31,17 +31,17 @@
     "rss-parser": "^3.0.0",
     "selenium-webdriver": "^4.0.0",
     "undici": "^7.0.0",
-    "zod": "^3.0.0"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.0.0",
-    "@types/selenium-webdriver": "^4.0.0",
+    "@types/node": "^26.0.0",
+    "@types/selenium-webdriver": "^4.35.6",
     "jest": "^30.0.0",
-    "jest-junit": "^16.0.0",
-    "ts-jest": "^29.4.3",
+    "jest-junit": "^17.0.0",
+    "ts-jest": "^29.0.0",
     "ts-node": "^10.0.0",
     "tslib": "^2.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "^6.0.0"
   }
 }
