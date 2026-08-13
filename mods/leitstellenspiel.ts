@@ -70,7 +70,7 @@ export const mcpLeitstellenspiel = {
         }
 
         const html = fs.readFileSync(file, 'utf8');
-        return html;
+        return html.substring(html.indexOf('<body'), html.indexOf('</body>'));
       }
 
       [
