@@ -7,7 +7,9 @@
   "scripts": {
     "cli": "node --experimental-strip-types mcp.ts",
     "server": "node --experimental-strip-types mcp.ts --rainbowroad",
-    "test": "jest --config jest.config.ts --silent --maxWorkers=50% --forceExit --detectOpenHandles --coverage --passWithNoTests"
+    "test": "jest --config jest.config.ts --silent --maxWorkers=50% --forceExit --detectOpenHandles --coverage --passWithNoTests",
+    "pull": "git submodule update --init --recursive && git pull --recurse-submodules",
+    "push": "git submodule foreach git push && git push"
   },
   "repository": {
     "type": "git",
