@@ -8,10 +8,11 @@ export const mcpMattpocock = {
         resolve(null);
         return;
       }
+      const categories = config.mattpotock?.categories || ['engineering', 'in-progress', 'productivity'];
       const pluginName = 'MattPocock';
       const callbacks = {}
       config.info('Scanning skills directory:', config.pwd + '/assets/mattpocock/skills/skills');
-      ['productivity'].forEach(category => {
+      categories.forEach(category => {
         console.log('Loading skills for category:', category);
         fs.readdirSync(config.pwd + '/assets/mattpocock/skills/skills/' + category)
           .filter(subfolder => fs.statSync(config.pwd + '/assets/mattpocock/skills/skills/' + category + '/' + subfolder).isDirectory())
