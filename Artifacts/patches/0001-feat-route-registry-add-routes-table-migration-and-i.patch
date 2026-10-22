@@ -1,0 +1,127 @@
+From 0d60be2ae02ca874b5f4c8e2113150e4274a07bc Mon Sep 17 00:00:00 2001
+From: Paperclip Agent <paperclip-agent@example.com>
+Date: Thu, 22 Oct 2026 10:31:08 +0200
+Subject: [PATCH] feat(route-registry): add routes table migration and internal
+ API + client skeleton
+
+---
+ db/migrations/20261022_add_routes_table.sql | 18 +++++++++
+ mods/clients/routeServiceClient.ts          | 30 ++++++++++++++
+ mods/internal/routeRegistry.ts              | 43 +++++++++++++++++++++
+ 3 files changed, 91 insertions(+)
+ create mode 100644 db/migrations/20261022_add_routes_table.sql
+ create mode 100644 mods/clients/routeServiceClient.ts
+ create mode 100644 mods/internal/routeRegistry.ts
+
+diff --git a/db/migrations/20261022_add_routes_table.sql b/db/migrations/20261022_add_routes_table.sql
+new file mode 100644
+index 0000000..ecc3e69
+--- /dev/null
++++ b/db/migrations/20261022_add_routes_table.sql
+@@ -0,0 +1,18 @@
++CREATE TABLE routes (
++  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
++  agent_id text NOT NULL,
++  protocol text NOT NULL DEFAULT 'http', -- http|https|unix|tcp
++  host text,
++  port integer,
++  socket_path text,
++  tls boolean DEFAULT false,
++  meta jsonb DEFAULT '{}'::jsonb,
++  last_heartbeat_at timestamptz,
++  status text DEFAULT 'active', -- active|draining|inactive
++  weight integer DEFAULT 100,
++  created_at timestamptz DEFAULT now(),
++  updated_at timestamptz DEFAULT now()
++);
++CREATE INDEX idx_routes_agent_id ON routes (agent_id);
++CREATE INDEX idx_routes_status ON routes (status);
++CREATE INDEX idx_routes_last_heartbeat ON routes (last_heartbeat_at);
+diff --git a/mods/clients/routeServiceClient.ts b/mods/clients/routeServiceClient.ts
+new file mode 100644
+index 0000000..4519306
+--- /dev/null
++++ b/mods/clients/routeServiceClient.ts
+@@ -0,0 +1,30 @@
++// Minimal routeService client used by orchestrator.
++import fetch from 'node-fetch';
++
++export interface Route {
++  id: string;
++  agent_id: string;
++  protocol: string;
++  host?: string;
++  port?: number;
++  socket_path?: string;
++  tls?: boolean;
++  meta?: any;
++}
++
++export class RouteServiceClient {
++  baseUrl: string;
++  constructor(baseUrl: string) {
++    this.baseUrl = baseUrl.replace(/\/$/, '');
++  }
++
++  async resolveRoute(agentId: string): Promise<Route | null> {
++    const url = `${this.baseUrl}/internal/routes/resolve?agent_id=${encodeURIComponent(agentId)}`;
++    const resp = await fetch(url, { method: 'GET' });
++    if (!resp.ok) return null;
++    const data = await resp.json();
++    return data.route || null;
++  }
++}
++
++export default RouteServiceClient;
+diff --git a/mods/internal/routeRegistry.ts b/mods/internal/routeRegistry.ts
+new file mode 100644
+index 0000000..d6faecb
+--- /dev/null
++++ b/mods/internal/routeRegistry.ts
+@@ -0,0 +1,43 @@
++import express from 'express';
++
++const router = express.Router();
++
++// Internal-only: register route
++router.post('/register', async (req, res) => {
++  // TODO: authenticate (mTLS/HMAC), validate payload
++  // Expected body: { agent_id, protocol, host, port, socket_path, tls, meta }
++  // Upsert into DB and respond with { route_id, expires_in }
++  res.status(201).json({ route_id: null, expires_in: 90 });
++});
++
++// heartbeat
++router.post('/heartbeat', async (req, res) => {
++  // Expected body: { route_id } OR { agent_id, host, port }
++  res.json({ route_id: null, expires_in: 90 });
++});
++
++// deregister
++router.post('/deregister', async (req, res) => {
++  res.json({ ok: true });
++});
++
++// resolve
++router.get('/resolve', async (req, res) => {
++  // query: agent_id
++  const { agent_id } = req.query;
++  if (!agent_id) return res.status(400).json({ error: 'missing agent_id' });
++  // TODO: lookup active route(s), apply health/weight selection
++  return res.json({ route: null, resolved_at: new Date().toISOString() });
++});
++
++// list
++router.get('/list', async (req, res) => {
++  res.json({ routes: [] });
++});
++
++// health-check trigger
++router.post('/health-check', async (req, res) => {
++  res.json({ checked: true, results: [] });
++});
++
++export default router;
+-- 
+2.54.0 (Apple Git-157)
+
