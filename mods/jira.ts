@@ -25,7 +25,11 @@ export const mcpJira = {
         { name: 'TicketHistory', jiraMethod: 'getIssueChangelog', description: null, args: { ticketId: z.string().describe('The ID of the Jira ticket to retrieve') } },
         { name: 'Board', jiraMethod: 'getBoard', description: null, args: { boardId: z.string().describe('The ID of the Jira board to retrieve') } },
         { name: 'LatestSprint', jiraMethod: 'getLastSprintForRapidView', description: null, args: { boardId: z.string().describe('The ID of the Jira board') } },
-        { name: 'SprintIssues', jiraMethod: 'getSprintIssues', description: null, args: { boardId: z.string().describe('The ID of the Jira board'), sprintId: z.string().describe('The ID of the Sprint') } }
+        { name: 'SprintIssues', jiraMethod: 'getSprintIssues', description: null, args: { boardId: z.string().describe('The ID of the Jira board'), sprintId: z.string().describe('The ID of the Sprint') } },
+        { name: 'Transitions', jiraMethod: 'listTransitions', description: 'Lists the status transitions currently available for a Jira ticket', args: { ticketId: z.string().describe('The ID of the Jira ticket') } },
+        { name: 'Comments', jiraMethod: 'getComments', description: 'Returns all comments of a Jira ticket', args: { ticketId: z.string().describe('The ID of the Jira ticket') } },
+        { name: 'Worklogs', jiraMethod: 'getIssueWorklogs', description: 'Returns the logged work (worklogs) of a Jira ticket', args: { ticketId: z.string().describe('The ID of the Jira ticket') } },
+        { name: 'Search', jiraMethod: 'searchJira', description: 'Searches Jira issues by JQL, e.g. "assignee = currentUser() AND resolution = Unresolved ORDER BY priority DESC"', args: { jql: z.string().describe('The JQL query') } }
       ].forEach(item => {
         callbacks[item.name] = async (args) => {
           const result = await jira[item.jiraMethod](...Object.values(args));

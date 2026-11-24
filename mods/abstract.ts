@@ -8,16 +8,26 @@ export interface MCPItem {
 
 export const registerMCPResource = (config: any, mcp: any, callbacks: { [key: string]: Function }, pluginName: string, item: MCPItem) => {
   if (!mcp) return;
-  const resourceUrl = Object.keys(item.args ?? {}).length ? '/' + Object.keys(item.args ?? {}).map(key => `{${key}}`).join('/') : '';
+  const argKeys = Object.keys(item.args ?? {});
+  const resourceUrl = argKeys.length ? '/' + argKeys.map(key => `{${key}}`).join('/') : '';
+  const baseUri = config.prefix + pluginName.toLowerCase() + "://" + item.name.toLowerCase();
+  // Resources without args are registered with a fixed URI so they show up in resources/list
+  // (and thus in @-mention completion). Resources with args stay templates, since their
+  // concrete URIs cannot be enumerated.
+  const uriOrTemplate = argKeys.length
+    ? new ResourceTemplate(baseUri + resourceUrl, { list: undefined })
+    : baseUri;
   // register resource
   mcp?.registerResource(
     config.prefix + pluginName.toLowerCase() + item.name.toLowerCase() + "resource",
-    new ResourceTemplate(config.prefix + pluginName.toLowerCase() + "://" + item.name.toLowerCase() + resourceUrl, { list: undefined }),
+    uriOrTemplate,
     {
       title: pluginName + " " + item.name,
       description: item.description ?? "Returns a " + pluginName + " " + item.name.toLowerCase(),
     },
-    async (uri, args) => {
+    async (uri, variables) => {
+      // For fixed-URI resources the second parameter is the request context, not template variables
+      const args = argKeys.length ? variables : {};
       try {
         config.info('Retrieving ' + pluginName + ' ' + item.name + ':', args);
         const returnvalue = await callbacks[item.name](args);
