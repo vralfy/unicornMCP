@@ -4,7 +4,6 @@
   "include": ["**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"],
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist",
     "moduleResolution": "node",
     "target": "es2022",
@@ -18,7 +17,6 @@
     "allowImportingTsExtensions": true,
     "allowSyntheticDefaultImports": true,
     "declaration": false,
-    "downlevelIteration": true,
     "noEmit": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,

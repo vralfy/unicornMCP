@@ -9,7 +9,7 @@ export const mcpLeitstellenspiel = {
       const createSceneInstruction = [
         'Create a scene entry from scene description. The scene format is as follows:',
         '```json',
-        '"{missionId}" : ["type1": 3, "type2": 6], // {mission title}',
+        '"{missionId}" : { "type1": 3, "type2": 6 }, // {mission title}',
         '```',
         '* do not modify any files',
         '* Ask for mission id if not provided',
@@ -29,11 +29,16 @@ export const mcpLeitstellenspiel = {
         '  * GW-L2-Wasser = SW',
         '  * GW-Messtechnik = GWM',
         '  * GW-Öl = GWO',
+        '  * GW-Werksfeuerwehr = GWW',
+        '  * ULF = ULF',
+        '  * Teleskopmast = TELE',
+        '  * Turbolöscher = TURBO',
         '  * Dekon-P = DEKONP',
         '  * Schlauchwagen = SW',
         '  * ELW 1 = ELW',
         '  * ELW 2 = ELW2',
         '  * Funkstreifenwagen = POL',
+        '  * Funkstreifenwagen (AP) = POLAP',
         '  * Polizeihubschrauber = POLH',
         '  * Zivilstreifenwagen = ZIV',
         '  * MTW-TZ = THWMTW',
@@ -64,7 +69,7 @@ export const mcpLeitstellenspiel = {
         }
 
         const html = fs.readFileSync(file, 'utf8');
-        return html;
+        return html.substring(html.indexOf('<body'), html.indexOf('</body>'));
       }
 
       [
@@ -96,11 +101,6 @@ export const mcpLeitstellenspiel = {
           };
         }
       );
-
-      // const tst = async () => {
-      //   callbacks['Mission']({ missionId: 123 }).then(console.log).catch(console.error);
-      // }
-      // tst();
 
       resolve(null);
     } catch (error) {

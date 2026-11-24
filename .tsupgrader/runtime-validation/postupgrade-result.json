@@ -1,0 +1,47 @@
+{
+  "planHash": "3a3a899938d9a1a3522067a73510a35fe950163cb71b6601f6620b80d9f7547d",
+  "phase": "postupgrade",
+  "recordedAtUtc": "2026-08-08T18:03:28.2387760Z",
+  "retryCount": 0,
+  "resetBaseline": false,
+  "result": {
+    "setupSucceeded": true,
+    "setupDurationMs": 1057,
+    "setupFailureOutput": null,
+    "assertions": [
+      {
+        "name": "server-boots-mcp-405",
+        "kind": "http-probe",
+        "verificationMethod": "http-status",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": null,
+        "outputSample": "HTTP 405\n{\u0022jsonrpc\u0022:\u00222.0\u0022,\u0022error\u0022:{\u0022code\u0022:-32000,\u0022message\u0022:\u0022GET Method not allowed.\u0022},\u0022id\u0022:null}\n--- server output ---\n\n\u003E unicorn@1.0.0 server\n\u003E node --experimental-strip-types mcp.ts --rainbowroad\n\n(node:26235) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time\n(Use \u0060node --trace-warnings ...\u0060 to show where the warning was created)\nNo config flag found, using default config file: /Users/nspecht/Documents/NetbeansProjects/lsshelper/unicornMCP/config.json\nConfig file not found: /Users/nspecht/Documents/NetbeansProjects/lsshelper/unicornMCP/config.json\n\uD83C\uDF08 [2026-08-08T18:03:24.687Z] \u0022\u2139\uFE0F\u0022 \u0022No serviceprefix flag found, using default prefix:\u0022 \u0022\u0022\n\uD83C\uDF08 [2026-08-08T18:03:24.692Z] \u0022\u2139\uFE0F\u0022 \u0022Setting up Express server...\u0022\n\u2728 [2026-08-08T18:03:24.699Z] \u0022\u2705\u0022 \u0022Registered magical module: mcpExamples\u0022\n\u2728 [2026-08-08T18:03:24.705Z] \u0022\u2705\u0022 \u0022Registered magical module: mcpUnicorn\u0022\n\uD83E\uDD84 [2026-08-08T18:03:24.720Z] \u0022\u2705\u0022 \u0022Registered magical module: mcpServer\u0022\n\uD83D\uDCAB [2026-08-08T18:03:24.720Z] \u0022\u274C\u0022 \u0022Module mcpWeather registration rejected:\u0022 {}\n\uD83E\uDD84 [2026-08-08T18:03:24.720Z] \u0022\u2705\u0022 \u0022Registered magical module: mcpLocation\u0022\n\uD83E\uDD8B [2026-08-08T18:03:24.721Z] \u0022\u2705\u0022 \u0022Registered magical module: mcpGoogle\u0022\n\uD83D\uDCAB [2026-08-08T18:03:24.742Z] \u0022\u274C\u0022 \u0022Module mcpBitbucket registration rejected:\u0022 {}\n\uD83E\uDD84 [2026-08-08T18:03:24.766Z] \u0022\u274C\u0022 \u0022Module mcpConfluence registration rejected:\u0022 {}\n\uD83C\uDF08 [2026-08-08T18:03:24.874Z] \u0022\u274C\u0022 \u0022Module mcpJira registration rejected:\u0022 {}\n\uD83E\uDD8B [2026-08-08T18:03:24.897Z] \u0022\u2705\u0022 \u0022Registered magical module: mcpRSS\u0022\n\uD83D\uDC96 [2026-08-08T18:03:24.955Z] \u0022\u2705\u0022 \u0022Registered magical module: mcpSelenium\u0022\n\uD83E\uDD8B [2026-08-08T18:03:24.974Z] \u0022\u274C\u0022 \u0022Module mcpGitlab registration rejected:\u0022 {}\n\uD83C\uDF38 [2026-08-08T18:03:24.974Z] \u0022\u2139\uFE0F\u0022 \u0022Starting UniCorn MagicCP server...\u0022\n\uD83D\uDC96 [2026-08-08T18:03:24.974Z] \u0022\u2139\uFE0F\u0022 \u0022Activating Rainbow Road...\u0022\n\uD83C\uDF38 [2026-08-08T18:03:24.976Z] \u0022\u2139\uFE0F\u0022 \u0022Rainbow Road activated! MCP server is trotting at http://localhost:3000/mcp\u0022\n",
+        "durationMs": 1043
+      },
+      {
+        "name": "tests-pass",
+        "kind": "process",
+        "verificationMethod": "test-results",
+        "passed": false,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 1,
+        "outputSample": "\n\u003E unicorn@1.0.0 test\n\u003E jest --config jest.config.ts --silent --maxWorkers=50% --forceExit --detectOpenHandles --coverage --passWithNoTests\n\nFAIL test/connection.test.ts\n  \u25CF Connection test suite \u203A should have proxy enabled\n\n    expect(received).toBeDefined()\n\n    Received: undefined\n\n      29 |\n      30 |   it(\u0022should have proxy enabled\u0022, () =\u003E {\n    \u003E 31 |     expect(config.secrets?.proxy).toBeDefined();\n         |                                   ^\n      32 |   });\n      33 |\n      34 |   sitesToCheck.forEach(url =\u003E {\n\n      at Object.\u003Canonymous\u003E (test/connection.test.ts:31:35)\n\nPASS mods/weather.test.ts\nPASS mods/rss.test.ts\n\nTest Suites: 1 failed, 2 passed, 3 total\nTests:       1 failed, 10 passed, 11 total\nSnapshots:   0 total\nTime:        1.664 s\n",
+        "durationMs": 3035,
+        "testResults": {
+          "testFramework": "jest",
+          "runnerDetectedFrom": "package_json",
+          "testsTotal": 11,
+          "testsPassed": 10,
+          "testsFailed": 1,
+          "testsSkipped": 0,
+          "parseFailed": false
+        }
+      }
+    ]
+  }
+}

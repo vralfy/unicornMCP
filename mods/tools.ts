@@ -18,7 +18,8 @@ export const mcpTools = {
       { "file": "mods/gitlab.ts", "className": "mcpGitlab" },
       { "file": "mods/google.ts", "className": "mcpGoogle" },
       { "file": "mods/rss.ts", "className": "mcpRSS" },
-      { "file": "mods/selenium.ts", "className": "mcpSelenium" }
+      { "file": "mods/selenium.ts", "className": "mcpSelenium" },
+      { "file": "mods/mattpocock.ts", "className": "mcpMattpocock" },
     ],
   },
 
