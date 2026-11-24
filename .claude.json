@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "unicorn": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npm",
+        "run",
+        "cli",
+        "--prefix=path/to/unicornMCP"
+      ],
+      "env": {
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "NO_PROXY": "localhost,127.0.0.1"
+      }
+    },
+    "rainbowroad": {
+      "type": "http",
+      "url": "http://localhost:3000/mcp"
+    }
+  }
+}
