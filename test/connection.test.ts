@@ -22,7 +22,7 @@ describe("Connection test suite", () => {
 
   if (config.secrets?.proxy) {
     // Setting up proxy for undici (which powers fetch in Node.js)
-    console.info(`Setting up proxy`);
+    console.error(`Setting up proxy`);
     const proxyAgent = new ProxyAgent(config.secrets.proxy.http);
     setGlobalDispatcher(proxyAgent);
   }

@@ -35,6 +35,7 @@ export const mcpTools = {
 
   loadConfig: () => {
     let configFile = process.cwd() + '/config.json';
+    let foundMsg = 'No config flag found, using default config file:';
     const configFlag = process.argv.find(arg => arg.startsWith('-c'));
     const configFlagLong = process.argv.find(arg => arg.startsWith('--config='));
     if (configFlag) {
@@ -42,19 +43,19 @@ export const mcpTools = {
       if (configPath) {
         configFile = configPath;
       }
-      console.error('found -c ', configFile);
+      foundMsg = 'found -c ';
     } else if (configFlagLong) {
       const configPath = configFlagLong.split('=')[1];
       if (configPath) {
         configFile = configPath;
       }
-      console.error('found --config=', configFile);
-    } else {
-      console.error('No config flag found, using default config file:', configFile);
+      foundMsg = 'found --config=';
     }
 
     const config = mcpTools.loadConfigFile(configFile);
     mcpTools.setup(config);
+    // config.* logger is only available after setup
+    config.log(foundMsg, configFile);
     return config;
   },
 
@@ -151,7 +152,7 @@ export const mcpTools = {
       const prefixFlag = process.argv.find(arg => arg.startsWith('-p'));
       const prefixFlagLong = process.argv.find(arg => arg.startsWith('--serviceprefix='));
       if (prefixFlag) {
-        console.error('found -p');
+        config.log('found -p');
         const prefix = process.argv[process.argv.indexOf(prefixFlag) + 1];
         if (prefix) {
           config.prefix = prefix;
