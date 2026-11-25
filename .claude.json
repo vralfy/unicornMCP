@@ -28,7 +28,7 @@
       "args": [
         "run",
         "cli",
-        "--prefix=/path/to/unicornMCP"
+        "--prefix=/Users/nspecht/Documents/NetbeansProjects/unicornMCP"
       ],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",

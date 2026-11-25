@@ -42,15 +42,15 @@ export const mcpTools = {
       if (configPath) {
         configFile = configPath;
       }
-      console.log('found -c ', configFile);
+      console.error('found -c ', configFile);
     } else if (configFlagLong) {
       const configPath = configFlagLong.split('=')[1];
       if (configPath) {
         configFile = configPath;
       }
-      console.log('found --config=', configFile);
+      console.error('found --config=', configFile);
     } else {
-      console.log('No config flag found, using default config file:', configFile);
+      console.error('No config flag found, using default config file:', configFile);
     }
 
     const config = mcpTools.loadConfigFile(configFile);
@@ -124,7 +124,8 @@ export const mcpTools = {
 
       config.logprefixes = config.logprefixes ?? ['🦄 ', '✨ ', '🌈 ', '🦋 ', '💫 ', '💖 ', '🌸 '];
       config.echo = (level, ...msg) => {
-        level = level || console.log;
+        //level = level || console.log;
+        level = console.error;
         config.logger(...msg);
         const prefix = config.logprefixes[Math.floor(Math.random() * config.logprefixes.length)];
         const timestamp = new Date().toISOString();
@@ -150,7 +151,7 @@ export const mcpTools = {
       const prefixFlag = process.argv.find(arg => arg.startsWith('-p'));
       const prefixFlagLong = process.argv.find(arg => arg.startsWith('--serviceprefix='));
       if (prefixFlag) {
-        console.log('found -p');
+        console.error('found -p');
         const prefix = process.argv[process.argv.indexOf(prefixFlag) + 1];
         if (prefix) {
           config.prefix = prefix;
