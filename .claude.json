@@ -1,4 +1,11 @@
 {
+  "_comment": [
+    "Beispiel-Konfiguration – wird von Claude Code NICHT automatisch gelesen.",
+    "Am einfachsten: 'npm run mcp:add' trägt den Server mit absolutem Pfad für deinen Benutzer ein (gilt für alle Projekte, auch für Paperclip-Agenten).",
+    "Manuell: einen Eintrag aus mcpServers in ~/.claude.json (alle Projekte) oder in .mcp.json eines Projekts übernehmen und 'path/to/unicornMCP' durch den absoluten Pfad ersetzen.",
+    "'unicorn' ist für Windows, 'unicorn-unix' für Linux/macOS – nur einen davon verwenden.",
+    "'rainbowroad' setzt einen laufenden 'npm run server' voraus (HTTP, z.B. für die Chat-Weboberfläche unter http://localhost:3000/chat)."
+  ],
   "mcpServers": {
     "unicorn": {
       "type": "stdio",
@@ -9,6 +16,19 @@
         "run",
         "cli",
         "--prefix=path/to/unicornMCP"
+      ],
+      "env": {
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+        "NO_PROXY": "localhost,127.0.0.1"
+      }
+    },
+    "unicorn-unix": {
+      "type": "stdio",
+      "command": "npm",
+      "args": [
+        "run",
+        "cli",
+        "--prefix=/path/to/unicornMCP"
       ],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",

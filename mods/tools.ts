@@ -20,6 +20,7 @@ export const mcpTools = {
       { "file": "mods/rss.ts", "className": "mcpRSS" },
       { "file": "mods/selenium.ts", "className": "mcpSelenium" },
       { "file": "mods/mattpocock.ts", "className": "mcpMattpocock" },
+      { "file": "mods/chat/chat.ts", "className": "mcpChat" },
     ],
   },
 

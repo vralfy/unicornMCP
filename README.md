@@ -77,6 +77,14 @@ The protocol is designed to be:
 
 3. Configure your magical missions and vehicles in `config.json`.
 
+4. Register the server in Claude Code (user scope, absolute path filled in automatically):
+
+   ```bash
+   npm run mcp:add              # or: npm run mcp:add -- project | --dry-run
+   ```
+
+   Manual alternative: see the examples in `.claude.json`.
+
 ## Project Structure
 
 - `mcpcli.ts` - Main MCP server script
