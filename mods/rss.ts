@@ -30,7 +30,7 @@ export const mcpRSS = {
       });
 
       // const tst = async () => {
-      //   callbacks['getFeed']({ url: 'https://www.spiegel.de/netzwelt/index.rss' }).then(console.log).catch(console.error);
+      //   callbacks['getFeed']({ url: 'https://www.spiegel.de/netzwelt/index.rss' }).then(config.log).catch(config.error);
       // }
       // tst();
 

@@ -18,7 +18,7 @@ if (fs.existsSync('secrets.json')) {
 
 if (config.secrets?.proxy) {
   // Setting up proxy for undici (which powers fetch in Node.js)
-  console.info(`Setting up proxy`);
+  config.info(`Setting up proxy`);
   const proxyAgent = new ProxyAgent(config.secrets.proxy.http);
   setGlobalDispatcher(proxyAgent);
 }
@@ -28,16 +28,16 @@ if (config.secrets?.proxy) {
   'https://www.google.com',
   ...(config.secrets?.openweathermap?.apiKey ? [`https://api.openweathermap.org/data/2.5/weather?q=London&appid=${config.secrets?.openweathermap?.apiKey}`] : []),
 ].forEach(url => {
-  console.info('ℹ️', `Testing connection to ${url}`);
+  config.info('ℹ️', `Testing connection to ${url}`);
   try {
     config.proxy.fetchProxy(url).then(res => {
       if (res.ok) {
-        console.info('✅', url, `Connection test successful`);
+        config.info('✅', url, `Connection test successful`);
       } else {
-        console.error('❌', url, `Connection test failed`);
+        config.error('❌', url, `Connection test failed`);
       }
     });
   } catch (e) {
-    console.error('❌', url, `Connection test failed`, e);
+    config.error('❌', url, `Connection test failed`, e);
   }
 });

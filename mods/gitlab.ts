@@ -198,16 +198,16 @@ export const mcpGitlab = {
       //   try {
       //     const fetch = await callbacks['fetch']('projects', {});
       //     const gitbeaker = await gitlab.Projects.all({ membership: true, ...defaultRequestOptions });
-      //     console.error('use git breaker:', config.gitlab?.useGitBeaker ? 'true' : 'false')
-      //     console.error('proxyUrl:', config.secrets?.proxy?.http ?? '(none)')
-      //     console.error('host:', serverConfig.host)
-      //     // console.error('fetch', fetch);
-      //     // console.error('gitbreaker', gitbeaker);
+      //     config.error('use git breaker:', config.gitlab?.useGitBeaker ? 'true' : 'false')
+      //     config.error('proxyUrl:', config.secrets?.proxy?.http ?? '(none)')
+      //     config.error('host:', serverConfig.host)
+      //     // config.error('fetch', fetch);
+      //     // config.error('gitbreaker', gitbeaker);
       //   } catch (error) {
-      //     console.error('💫 Error in magical tst function:', error.name, error.message);
-      //     console.error('💫 Full error:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+      //     config.error('💫 Error in magical tst function:', error.name, error.message);
+      //     config.error('💫 Full error:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
       //     if (error.name === 'AbortError') {
-      //       console.error('🦄 Request was aborted due to timeout - the rainbow road is too long!');
+      //       config.error('🦄 Request was aborted due to timeout - the rainbow road is too long!');
       //     }
       //   }
       // };

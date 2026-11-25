@@ -66,7 +66,7 @@ export const mcpWeather = {
       });
 
       const tst = async () => {
-        callbacks['city']({ city: 'Berlin' }).then(console.log).catch(console.error);
+        callbacks['city']({ city: 'Berlin' }).then(config.log).catch(config.error);
       }
       tst();
 
